@@ -5,40 +5,28 @@ block main
         +box-head('Danh sách sản phẩm test', 'Dưới đây là các sản phẩm hiện có trong cửa hàng của chúng tôi.')
 
         .row
-            //- Render động bằng pug khi có dữ liệu thực tế
-            .col-md-4.mb-4
-                .card.h-100.shadow-sm
-                    .d-flex.justify-content-center.align-items-center(style="height:220px; background:#f8f9fa;")
-                        img.card-img-top(
-                            src="https://admin.hoanghamobile.com/Uploads/2023/09/14/vn-iphone-15-pink-pdp-image-position-1a-pink-color.jpg", 
-                            alt="Sản phẩm A", 
-                            style="max-height:200px; max-width:100%; object-fit:contain;"
-                        )
-                    .card-body
-                        h5.card-title.text-primary.mb-2 Sản phẩm A
-                        .product-desc.mb-2
-                            span.fw-semibold Giá: 
-                            span.text-danger 100.000₫
-                            br
-                            span.fw-semibold Danh mục: 
-                            span.text-secondary Điện tử
-                        p.text-muted.mb-0 Một sản phẩm chất lượng cao, thiết kế hiện đại, phù hợp với nhu cầu sử dụng hàng ngày.
-            .col-md-4.mb-4
-                .card.h-100.shadow-sm
-                    .d-flex.justify-content-center.align-items-center(style="height:220px; background:#f8f9fa;")
-                        img.card-img-top(
-                            src="https://bizweb.dktcdn.net/100/255/689/products/apple-iphone-16-pro-hero-240909-inline-jpg-large.jpg?v=1726321419627", 
-                            alt="Sản phẩm B", 
-                            style="max-height:200px; max-width:100%; object-fit:contain;"
-                        )
-                    .card-body
-                        h5.card-title.text-primary.mb-2 Sản phẩm B
-                        .product-desc.mb-2
-                            span.fw-semibold Giá: 
-                            span.text-danger 200.000₫
-                            br
-                            span.fw-semibold Danh mục: 
-                            span.text-secondary Gia dụng
-                        p.text-muted.mb-0 Sản phẩm tiện ích cho gia đình, bền bỉ và dễ sử dụng.
+            each product in products
+                .col-md-4.mb-4
+                    .card.h-100.shadow-sm
+                        .d-flex.justify-content-center.align-items-center(style="height:220px; background:#f8f9fa;")
+                            img.card-img-top(
+                                src=product.thumbnail, 
+                                alt=product.title, 
+                                style="max-height:200px; max-width:100%; object-fit:contain;"
+                            )
+                        .card-body
+                            h5.card-title.text-primary.mb-2= product.title
+                            .product-desc.mb-2
+                                span.fw-semibold Giá: 
+                                if product.discountPercentage
+                                    span.text-muted.text-decoration-line-through.me-2= product.price + '$'
+                                    span.text-danger= product.discountedPrice + '$'
+                                else
+                                    span.text-danger= product.price + '$'
+                                br
+                                span.fw-semibold Kho: 
+                                span.text-secondary= product.stock
+                            p.text-muted.mb-0= product.description
+
 
 
