@@ -14,7 +14,7 @@ app.use(express.static('public'))
 app.set('views', './views');
 app.set('view engine','pug');
 
-// App local vảriables
+// App local variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 route(app);
