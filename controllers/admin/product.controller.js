@@ -1,5 +1,6 @@
 const product = require('../../models/product.model')
 const filterStatus = require('../../helpers/filterStatus')
+const search = require('../../helpers/search')
 // [GET] /admin/products
 module.exports.product = async (req,res) => {
     const find = {
@@ -11,16 +12,15 @@ module.exports.product = async (req,res) => {
     if (req.query.status){
         find.status = req.query.status;
     }
+
     // End Button Status
 
     // Form Search Keyword
-    let keyword = '';
-    if (req.query.keyword) {
-        keyword = req.query.keyword;
-        const regex = new RegExp(keyword,'i');
-        find.title = regex;
-    }
 
+    objectSearch = search(req.query);
+    if (objectSearch.regex){
+        find.title = objectSearch.regex;
+    }
 
     // End Form Search Keyword
 
@@ -29,6 +29,6 @@ module.exports.product = async (req,res) => {
         title: 'Product Management',
         products: products,
         buttonStatus: buttonStatus,
-        keyword: keyword
+        keyword:  objectSearch.keyword
     })
 }
