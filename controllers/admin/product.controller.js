@@ -1,34 +1,13 @@
 const product = require('../../models/product.model')
-
+const filterStatus = require('../../helpers/filterStatus')
 // [GET] /admin/products
 module.exports.product = async (req,res) => {
     const find = {
         deleted: false,
     };
     // Button Status
-    const buttonStatus = [
-        {
-            name: 'Tất cả',
-            class:'btn btn-sm btn-outline-success',
-            status: '',
-        },
-        {
-            name: 'Hoạt động',
-            class:'btn btn-sm btn-outline-success ms-1',
-            status: 'active',
-        },
-        {
-            name: 'Dừng hoạt động',
-            class:'btn btn-sm btn-outline-success ms-1',
-            status: 'inactive',
-        }
-    ]
-    buttonStatus.forEach(item => {
-        if (req.query.status === item.status || (item.status === '' && !req.query.status)){
-            item.class += ' active'
-        }
-    })  
 
+    const buttonStatus = filterStatus(req.query);
     if (req.query.status){
         find.status = req.query.status;
     }
