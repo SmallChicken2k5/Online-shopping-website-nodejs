@@ -30,6 +30,7 @@ if (formSearch) {
         } else {
             url.searchParams.delete('keyword');
         }
+        url.searchParams.set('page',1);
         window.location.href = url.href;
     })
 }
