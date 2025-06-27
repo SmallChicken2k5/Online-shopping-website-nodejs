@@ -2,45 +2,64 @@ extends ../../layouts/default.pug
 
 block main
   h1 Danh sách sản phẩm
-  table.table.table-hover.table-sm
-    thead
-      tr
-        th STT
-        th Hình ảnh
-        th Tiêu đề
-        th Giá
-        th Trạng thái
-        th Hành động
-    tbody
-        tr
-            td 1
-            td
-                img(
-                    src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-                    alt="Sản phẩm 1",
-                    width="100px",
-                    height="auto"
+
+  .card.mb-3 
+    .card-header Bộ lọc và tìm kiếm
+      .card-body 
+        .row 
+          .col-6
+            .btn-group
+              each button in buttonStatus 
+                button(
+                  class=button.class
+                  button-status=button.status
+                ) #{button.name}
+          .col-6 
+            form(id='form-search')
+              .input-group
+                input(
+                  type='text'
+                  class='form-control'
+                  name='keyword'
+                  placeholder='Tìm kiếm sản phẩm...'
+                    value=keyword
                 )
-            td Sản phẩm 1
-            td 1510$
-            td
-                a(href="#", class="badge text-bg-success rounded-pill") Hoạt động
-            td
-                button(type="button", class="btn btn-warning btn-sm") Sửa
-                button(type="button", class="btn btn-danger btn-sm ms-1") Xóa
-        tr
-            td 2
-            td
-                img(
-                    src="https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp",
-                    alt="Sản phẩm 2",
-                    width="100px",
-                    height="auto"
-                )
-            td Sản phẩm 2
-            td 150$
-            td
-                a(href="#", class="badge text-bg-danger rounded-pill") Dừng hoạt động
-            td
-                button(type="button", class="btn btn-warning btn-sm") Sửa
-                button(type="button", class="btn btn-danger btn-sm ms-1") Xóa
+                .input-group-append
+                  button(
+                    type='submit'
+                    class='btn btn-success'
+                  ) Tìm kiếm
+  
+  .card.mb-3 
+    .card-header Danh sách sản phẩm
+      .card-body 
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Giá
+              th Trạng thái
+              th Hành động
+          tbody
+              each product, index in products
+                tr
+                  td #{index + 1}
+                  td
+                      img(
+                          src=product.thumbnail,
+                          alt=product.title,
+                          width="100px",
+                          height="auto"
+                      )
+                  td #{product.title}
+                  td #{product.price}$
+                  td
+                      if product.status === 'active'
+                          a(href="#", class="badge text-bg-success rounded-pill") Hoạt động
+                      else
+                          a(href="#", class="badge text-bg-danger rounded-pill") Dừng hoạt động
+                  td
+                      button(type="button", class="btn btn-warning btn-sm") Sửa
+                      button(type="button", class="btn btn-danger btn-sm ms-1") Xóa
