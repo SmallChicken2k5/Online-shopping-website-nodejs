@@ -25,7 +25,3 @@
 - `src/` - Mã nguồn
 - `routes/` - Các route API
 - `models/` - Các model cơ sở dữ liệu
-
-## Giấy Phép
-
-MIT
