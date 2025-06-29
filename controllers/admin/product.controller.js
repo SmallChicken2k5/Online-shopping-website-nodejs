@@ -3,7 +3,7 @@ const filterStatusHelper = require('../../helpers/filterStatus')
 const searchHelper = require('../../helpers/search')
 const paginationHelper = require('../../helpers/pagination')
 // [GET] /admin/products
-module.exports.product = async (req,res) => {
+module.exports.index = async (req,res) => {
     const find = {
         deleted: false,
     };
@@ -44,4 +44,13 @@ module.exports.product = async (req,res) => {
         keyword:  objectSearch.keyword,
         pagination: objectPagination,
     })
+}
+
+
+// [GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+    const id = req.params.id;
+    const status = req.params.status;
+    await product.updateOne({_id: id}, {status : status});
+    res.redirect(req.get('Referrer') || '/')
 }

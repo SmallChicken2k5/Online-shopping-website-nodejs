@@ -27,11 +27,12 @@ mixin pagination(pagination)
                     button(
                         class='page-link'
                     ) ...
-            li(class='page-item')
-                button(
-                    class='page-link'
-                    button-pagination=1
-                ) #{pagination.totalPage}
+            if (pagination.totalPage > 1)
+                li(class='page-item')
+                    button(
+                        class='page-link'
+                        button-pagination=pagination.totalPage
+                    ) #{pagination.totalPage}
             li(class="page-item")
                 button(
                 class="page-link"
