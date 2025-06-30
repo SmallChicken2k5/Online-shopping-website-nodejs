@@ -47,10 +47,30 @@ module.exports.index = async (req,res) => {
 }
 
 
-// [GET] /admin/products/change-status/:status/:id
+// [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
     const status = req.params.status;
     await product.updateOne({_id: id}, {status : status});
+    res.redirect(req.get('Referrer') || '/')
+}
+
+// [PATCH] /admin/products/change-multi
+module.exports.changeMulti = async (req, res) => {
+    const ids = req.body.ids.split(',');
+    const type = req.body.type;
+    switch (type) {
+        case 'active':
+            await product.updateMany({_id: {$in: ids}}, {status: 'active'});
+            break;
+        case 'inactive':
+            await product.updateMany({_id: {$in: ids}}, {status: 'inactive'});
+            break;
+        // case 'delete':
+        //     await product.updateMany({_id: {$in: ids}}, {deleted: true});
+        //     break;
+        default:
+            break;
+    }
     res.redirect(req.get('Referrer') || '/')
 }
