@@ -36,7 +36,11 @@ module.exports.index = async (req,res) => {
     objectPagination = await paginationHelper(objectPagination, req.query, countProducts);
     // End Pagination
 
-    const products = await product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
+    const products = await product
+        .find(find)
+        .sort({position : 'desc'})
+        .limit(objectPagination.limitItems)
+        .skip(objectPagination.skip);
     res.render('admin/pages/products', {
         title: 'Product Management',
         products: products,
@@ -71,6 +75,12 @@ module.exports.changeMulti = async (req, res) => {
                 deleted: true,
                 deletedAt: new Date(),
             });
+            break;
+        case 'change-position':
+            for (let id of ids) {
+                const [productId, position] = id.split('-');
+                await product.updateOne({_id: productId}, {position: parseInt(position)});
+            }
             break;
         default:
             break;

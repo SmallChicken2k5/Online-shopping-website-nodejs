@@ -36,6 +36,7 @@ block main
               th Hình ảnh
               th Tiêu đề
               th Giá
+              th Vị trí
               th Trạng thái
               th Hành động
           tbody
@@ -58,6 +59,15 @@ block main
                       )
                   td #{product.title}
                   td #{product.price}$
+                  td 
+                    input(
+                      type='number'
+                      value=product.position
+                      class='form-control form-control-sm'
+                      style='width: 50px;'
+                      name='position'
+                      min=1
+                    )
                   td
                       if product.status === 'active'
                           a(href="javascript:;"

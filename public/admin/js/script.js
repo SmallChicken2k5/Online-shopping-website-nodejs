@@ -101,11 +101,19 @@ if (formChangeMulti) {
             alert('Vui lòng chọn hành động để thực hiện');
             return;
         }
-        console.log(e.target.elements.type.value )
+
         const checkList = checkboxMulti.querySelectorAll(`input[name='ids']:checked`)
         const idList = [];
         checkList.forEach(checkbox => {
-            idList.push(checkbox.value);
+            const id = checkbox.value;
+            if (e.target.elements.type.value === 'change-position')
+            {
+                const position = checkbox.closest('tr').querySelector(`input[name='position']`).value;
+                idList.push(`${id}-${position}`);
+
+            } else {
+                idList.push(id);
+            }
         })
         if (idList.length === 0){
             e.preventDefault();

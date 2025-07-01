@@ -6,7 +6,7 @@ module.exports.index = async (req, res) => {
     const products = await product.find({
         status: 'active',
         deleted: false
-    });
+    }).sort({position: 'desc'});
     const  discountedProducts = products.map((item) => {
         item.discountedPrice = item.price - (item.price * item.discountPercentage / 100);
         item.discountedPrice = item.discountedPrice.toFixed(2);
