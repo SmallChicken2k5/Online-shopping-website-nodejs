@@ -102,7 +102,6 @@ if (formChangeMulti) {
         }
         const ids = formChangeMulti.querySelector(`input[name='ids']`);
         ids.value = idList.join(',');
-        console.log('ok')
     })
 }
 // End Form Change Multi Status
