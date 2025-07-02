@@ -1,0 +1,8 @@
+mixin showAlertSuccess(dataTime)
+    - if (messages.success)
+        .message.info
+        div(
+            class='alert alert-success'
+            show-alert
+            data-time=dataTime
+        ) #{messages.success} <span close-alert>X</span>

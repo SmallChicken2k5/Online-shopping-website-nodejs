@@ -56,6 +56,7 @@ module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
     const status = req.params.status;
     await product.updateOne({_id: id}, {status : status});
+    req.flash('success', `Trạng thái sản phẩm đã được chuyển sang ${(status === 'active') ? 'hoạt động' : 'không Hoạt Động'}`);
     res.redirect(req.get('Referrer') || '/')
 }
 
@@ -85,6 +86,13 @@ module.exports.changeMulti = async (req, res) => {
         default:
             break;
     }
+    const actionMap = {
+        'active': 'kích hoạt',
+        'inactive': 'không kích hoạt',
+        'delete-all': 'xóa',
+        'change-position': 'thay đổi vị trí',
+    };
+    req.flash('success', `Đã thực hiện thao tác ${actionMap[type]} thành công trên ${ids.length} sản phẩm`);
     res.redirect(req.get('Referrer') || '/')
 }
 
@@ -96,5 +104,6 @@ module.exports.deleteProduct = async (req, res) => {
         deleted: true,
         deletedAt: new Date(),
     })
+    req.flash('success', 'Sản phẩm đã được xóa thành công');
     res.redirect(req.get('Referrer') || '/')
 }

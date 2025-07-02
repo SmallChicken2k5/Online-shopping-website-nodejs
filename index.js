@@ -1,4 +1,7 @@
 const express = require('express')
+const flash = require('express-flash')
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
 require('dotenv').config()
@@ -16,6 +19,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static('public'))
 app.set('views', './views');
 app.set('view engine','pug');
+
+//Flash message
+app.use(cookieParser('afasdhgwerw'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+// End Flash message
 
 // App local variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;

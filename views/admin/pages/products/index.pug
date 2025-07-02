@@ -3,9 +3,11 @@ include ../../mixins/filterStatus.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
+include ../../mixins/showAlertSuccess.pug
 block main
+  +showAlertSuccess(5000)
   h1 Danh sách sản phẩm
-
+  
   .card.mb-3 
     .card-header Bộ lọc và tìm kiếm
       .card-body 
