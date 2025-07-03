@@ -50,7 +50,6 @@ module.exports.index = async (req,res) => {
     })
 }
 
-
 // [PATCH] /admin/products/change-status/:status/:id
 module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
@@ -96,7 +95,6 @@ module.exports.changeMulti = async (req, res) => {
     res.redirect(req.get('Referrer') || '/')
 }
 
-
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteProduct = async (req, res) => {
     const id = req.params.id;
@@ -106,4 +104,25 @@ module.exports.deleteProduct = async (req, res) => {
     })
     req.flash('success', 'Sản phẩm đã được xóa thành công');
     res.redirect(req.get('Referrer') || '/')
+}
+
+// [GET] /admin/products/create
+module.exports.create = async (req, res) => {
+    res.render('admin/pages/products/create', {
+        title: 'Tạo Sản Phẩm Mới',
+    });
+}
+module.exports.createPost = async (req, res) => {
+    req.body.price = parseInt(req.body.price);
+    req.body.stock = parseInt(req.body.stock);
+    req.body.discountPercentage = parseInt(req.body.discountPercentage);
+    if (req.body.position === '') {
+        const count = await product.countDocuments();
+        req.body.position = count + 1;
+    } else {
+        req.body.position = parseInt(req.body.position);
+    }
+    newProduct = new product(req.body);
+    await newProduct.save();
+    res.redirect('/admin/products')
 }
