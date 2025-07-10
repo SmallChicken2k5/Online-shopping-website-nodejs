@@ -2,6 +2,7 @@ const product = require('../../models/product.model')
 const filterStatusHelper = require('../../helpers/filterStatus')
 const searchHelper = require('../../helpers/search')
 const paginationHelper = require('../../helpers/pagination')
+const systemConfig = require('../../config/system');
 // [GET] /admin/products
 module.exports.index = async (req,res) => {
     const find = {
@@ -113,7 +114,7 @@ module.exports.create = async (req, res) => {
     });
 }
 module.exports.createPost = async (req, res) => {
-    console.log(req.file)
+
     req.body.price = parseInt(req.body.price);
     req.body.stock = parseInt(req.body.stock);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
@@ -123,8 +124,12 @@ module.exports.createPost = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
+    if (req.file){
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    }else {
+        req.body.thumbnail = '';
+    }
     newProduct = new product(req.body);
     await newProduct.save();
-    res.redirect('/admin/products')
+    res.redirect(`${systemConfig.prefixAdmin}/products`);
 }
