@@ -82,21 +82,26 @@ block main
                     )
                   td
                       if product.status === 'active'
-                          a(href="javascript:;"
+                          a(
+                            href="javascript:;"
                             class="badge text-bg-success rounded-pill"
                             data-status="active"
                             data-id=product._id
                             button-change-status 
                            ) Hoạt động
                       else
-                          a(href="javascript:;"
-                          class="badge text-bg-danger rounded-pill"
-                          data-status="inactive"
-                          data-id=product._id
-                          button-change-status 
+                          a(
+                            href="javascript:;"
+                            class="badge text-bg-danger rounded-pill"
+                            data-status="inactive"
+                            data-id=product._id
+                            button-change-status 
                           ) Dừng hoạt động
                   td
-                      button(type="button", class="btn btn-warning btn-sm") Sửa
+                      a(
+                        href =`${prefixAdmin}/products/edit/${product._id}`
+                        class="btn btn-warning btn-sm"
+                      ) Sửa
                       button(
                         type="button"
                         class="btn btn-danger btn-sm ms-1"
