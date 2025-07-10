@@ -55,7 +55,7 @@ module.exports.changeStatus = async (req, res) => {
     const id = req.params.id;
     const status = req.params.status;
     await product.updateOne({_id: id}, {status : status});
-    req.flash('success', `Trạng thái sản phẩm đã được chuyển sang ${(status === 'active') ? 'hoạt động' : 'không Hoạt Động'}`);
+    req.flash('success', `Trạng thái sản phẩm đã được chuyển sang ${(status === 'active') ? 'hoạt động' : 'không hoạt động'}`);
     res.redirect(req.get('Referrer') || '/')
 }
 
@@ -113,6 +113,7 @@ module.exports.create = async (req, res) => {
     });
 }
 module.exports.createPost = async (req, res) => {
+    console.log(req.file)
     req.body.price = parseInt(req.body.price);
     req.body.stock = parseInt(req.body.stock);
     req.body.discountPercentage = parseInt(req.body.discountPercentage);
@@ -122,6 +123,7 @@ module.exports.createPost = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
+    req.body.thumbnail = `/uploads/${req.file.filename}`;
     newProduct = new product(req.body);
     await newProduct.save();
     res.redirect('/admin/products')

@@ -135,7 +135,7 @@ if(showAlert) {
     setTimeout( () => {
         showAlert.classList.add('alert-hidden');
     },dataTime)
-    const closeAlert = showAlert.querySelector('[close-alert')
+    const closeAlert = showAlert.querySelector('[close-alert]')
     if (closeAlert){
         closeAlert.addEventListener('click', () => {
             showAlert.classList.add('alert-hidden');
@@ -144,3 +144,28 @@ if(showAlert) {
 }
 
 // End Show Alert Message
+
+// Show Image Preview
+const uploadImage = document.querySelector('[upload-image]');
+const uploadImageInput = document.querySelector('[upload-image-input]');
+const uploadImageClear = document.querySelector('[upload-image-clear]');
+const imagePreview = document.querySelector('[upload-image-preview]');
+if (uploadImage && uploadImageInput && uploadImageClear) {
+    uploadImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const imagePreview = document.querySelector('[upload-image-preview]');
+            const imageUrl = URL.createObjectURL(file);
+            imagePreview.src = imageUrl;
+            uploadImageClear.classList.remove('d-none');
+        }
+    })
+    uploadImageClear.addEventListener('click', () => {
+        uploadImageInput.value = '';
+        imagePreview.src = '';
+        uploadImageClear.classList.add('d-none');
+    })
+}
+
+// End Show Image Preview
+

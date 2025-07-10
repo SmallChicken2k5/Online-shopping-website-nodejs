@@ -63,11 +63,11 @@ block main
                     )
                   td #{index + 1 + (pagination.currentPage - 1) * pagination.limitItems}
                   td
+                    .product-thumbnail(style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;")
                       img(
-                          src=product.thumbnail,
-                          alt=product.title,
-                          width="100px",
-                          height="auto"
+                        src=product.thumbnail,
+                        alt=product.title,
+                        style="max-width: 100%; max-height: 100%; object-fit: contain;"
                       )
                   td #{product.title}
                   td #{product.price}$

@@ -99,4 +99,46 @@
 }
 /* End image-preview */
 
+/* Image Preview */
+.image-preview {
+    width: 150px;
+    height: auto;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.image-preview[src=""] {
+    display: none;
+}
+.upload-image-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.upload-image-clear {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  z-index: 2;
+  background: #ff4d4f; /* Red background */
+  border: none;
+  border-radius: 0; /* Square shape */
+  width: 28px;
+  height: 28px;
+  font-weight: bold;
+  color: #fff; /* White text */
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.2s;
+}
+.upload-image-clear:hover {
+  background: #d9363e; /* Darker red on hover */
+}
+/* End Image Preview */
 
