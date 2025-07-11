@@ -21,10 +21,10 @@ const app = express();
 app.use(methodOverride('_method'))
 const port = process.env.PORT;
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(express.static('public'))
+app.use(express.static(`${__dirname}/public`));
 
 // set view engine PUG
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine','pug');
 
 //Flash message
