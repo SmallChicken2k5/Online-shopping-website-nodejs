@@ -125,11 +125,11 @@ module.exports.createPost = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-    } else {
-        req.body.thumbnail = '';
-    }
+    // if (req.file) {
+    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // } else {
+    //     req.body.thumbnail = '';
+    // }
     newProduct = new product(req.body);
     await newProduct.save();
     res.redirect(`${systemConfig.prefixAdmin}/products`);
