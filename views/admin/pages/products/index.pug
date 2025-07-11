@@ -6,6 +6,7 @@ include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
 block main
   +showAlertSuccess(5000)
+  +showAlertError(5000)
   h1 Danh sách sản phẩm
   
   .card.mb-3 
@@ -102,6 +103,10 @@ block main
                         href =`${prefixAdmin}/products/edit/${product._id}`
                         class="btn btn-warning btn-sm"
                       ) Sửa
+                      a(
+                        href =`${prefixAdmin}/products/detail/${product._id}`
+                        class="btn btn-info btn-sm ms-1"
+                      ) Chi tiết
                       button(
                         type="button"
                         class="btn btn-danger btn-sm ms-1"

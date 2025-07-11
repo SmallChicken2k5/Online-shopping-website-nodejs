@@ -137,17 +137,22 @@ module.exports.createPost = async (req, res) => {
 
 // [GET] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
-    const id = req.params.id;
-    const editProduct = await product.findOne(
-        {
-            _id: id,
-            deleted: false
-        }
-    );
-    res.render('admin/pages/products/edit', {
-        title: 'Chỉnh Sửa Sản Phẩm',
-        product: editProduct
-    });
+    try {
+        const id = req.params.id;
+        const editProduct = await product.findOne(
+            {
+                _id: id,
+                deleted: false
+            }
+        );
+        res.render('admin/pages/products/edit', {
+            title: 'Chỉnh Sửa Sản Phẩm',
+            product: editProduct
+        });        
+    } catch (error) {
+        req.flash('error', 'Sản phẩm không tồn tại hoặc đã bị xóa');
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
 }
 
 // [PATCH] /admin/products/edit/:id
@@ -184,4 +189,17 @@ module.exports.editPatch = async (req, res) => {
         console.error(error);
     }
     res.redirect(req.get('Referrer') || '/')
+}
+
+// [GET] /admin/products/detail/:id
+module.exports.detail = async (req, res) => {
+    const find = {
+        _id: req.params.id,
+        deleted: false
+    }
+    const detailProduct = await product.findOne(find);
+    res.render('admin/pages/products/detail', {
+        title: 'Chi Tiết Sản Phẩm',
+        product: detailProduct
+    });
 }
