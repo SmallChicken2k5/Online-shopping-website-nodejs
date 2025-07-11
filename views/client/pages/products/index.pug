@@ -1,6 +1,9 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 block main 
+    +showAlertSuccess('3000')
+    +showAlertError('3000')
     .container.mt-5
         +box-head('Danh sách sản phẩm test', 'Dưới đây là các sản phẩm hiện có trong cửa hàng của chúng tôi.')
 
@@ -15,7 +18,11 @@ block main
                                 style="max-height:200px; max-width:100%; object-fit:contain;"
                             )
                         .card-body
-                            h5.card-title.text-primary.mb-2= product.title
+                            h5.card-title.text-primary.mb-2
+                                a(
+                                    href='/products/' + product.slug , 
+                                    class="text-decoration-none text-primary"
+                                ) #{product.title}
                             .product-desc.mb-2
                                 span.fw-semibold Giá: 
                                 if product.discountPercentage
