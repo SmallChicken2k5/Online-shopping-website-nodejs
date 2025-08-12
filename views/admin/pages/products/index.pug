@@ -43,98 +43,98 @@ block main
               ) clear
   .card.mb-3 
     .card-header Danh sách sản phẩm
-      .card-body 
-        .row.align-items-center
-          .col
-            +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-          .col-auto.text-end
-            a(
-              href=`${prefixAdmin}/products/create`
-              class='btn btn-outline-success'
-            ) + Thêm mới
-            br
-            br
-    
-        table(
-          class = 'table table-hover table-sm'
-          checkbox-multi
-        )
-          thead
-            tr
-              th 
-                input(
-                  type='checkbox'
-                  class='form-check-input'
-                  name="checkAll"
-                )
-              th STT
-              th Hình ảnh
-              th Tiêu đề
-              th Giá
-              th Vị trí
-              th Trạng thái
-              th Hành động
-          tbody
-              each product, index in products
-                tr
-                  td 
-                    input(
-                      type='checkbox'
-                      class='form-check-input'
-                      name='ids'
-                      value=product._id
+    .card-body 
+      .row.align-items-center
+        .col
+          +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+        .col-auto.text-end
+          a(
+            href=`${prefixAdmin}/products/create`
+            class='btn btn-outline-success'
+          ) + Thêm mới
+          br
+          br
+  
+      table(
+        class = 'table table-hover table-sm'
+        checkbox-multi
+      )
+        thead
+          tr
+            th 
+              input(
+                type='checkbox'
+                class='form-check-input'
+                name="checkAll"
+              )
+            th STT
+            th Hình ảnh
+            th Tiêu đề
+            th Giá
+            th Vị trí
+            th Trạng thái
+            th Hành động
+        tbody
+            each product, index in products
+              tr
+                td 
+                  input(
+                    type='checkbox'
+                    class='form-check-input'
+                    name='ids'
+                    value=product._id
+                  )
+                td #{index + 1 + (pagination.currentPage - 1) * pagination.limitItems}
+                td
+                  .product-thumbnail(style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;")
+                    img(
+                      src=product.thumbnail,
+                      alt=product.title,
+                      style="max-width: 100%; max-height: 100%; object-fit: contain;"
                     )
-                  td #{index + 1 + (pagination.currentPage - 1) * pagination.limitItems}
-                  td
-                    .product-thumbnail(style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;")
-                      img(
-                        src=product.thumbnail,
-                        alt=product.title,
-                        style="max-width: 100%; max-height: 100%; object-fit: contain;"
-                      )
-                  td #{product.title}
-                  td #{product.price}$
-                  td 
-                    input(
-                      type='number'
-                      value=product.position
-                      class='form-control form-control-sm'
-                      style='width: 50px;'
-                      name='position'
-                      min=1
-                    )
-                  td
-                      if product.status === 'active'
-                          a(
-                            href="javascript:;"
-                            class="badge text-bg-success rounded-pill"
-                            data-status="active"
-                            data-id=product._id
-                            button-change-status 
-                           ) Hoạt động
-                      else
-                          a(
-                            href="javascript:;"
-                            class="badge text-bg-danger rounded-pill"
-                            data-status="inactive"
-                            data-id=product._id
-                            button-change-status 
-                          ) Dừng hoạt động
-                  td
-                      a(
-                        href =`${prefixAdmin}/products/edit/${product._id}`
-                        class="btn btn-warning btn-sm"
-                      ) Sửa
-                      a(
-                        href =`${prefixAdmin}/products/detail/${product._id}`
-                        class="btn btn-info btn-sm ms-1"
-                      ) Chi tiết
-                      button(
-                        type="button"
-                        class="btn btn-danger btn-sm ms-1"
-                        button-delete
-                        data-id=product._id
-                      ) Xóa
+                td #{product.title}
+                td #{product.price}$
+                td 
+                  input(
+                    type='number'
+                    value=product.position
+                    class='form-control form-control-sm'
+                    style='width: 50px;'
+                    name='position'
+                    min=1
+                  )
+                td
+                    if product.status === 'active'
+                        a(
+                          href="javascript:;"
+                          class="badge text-bg-success rounded-pill"
+                          data-status="active"
+                          data-id=product._id
+                          button-change-status 
+                          ) Hoạt động
+                    else
+                        a(
+                          href="javascript:;"
+                          class="badge text-bg-danger rounded-pill"
+                          data-status="inactive"
+                          data-id=product._id
+                          button-change-status 
+                        ) Dừng hoạt động
+                td
+                    a(
+                      href =`${prefixAdmin}/products/edit/${product._id}`
+                      class="btn btn-warning btn-sm"
+                    ) Sửa
+                    a(
+                      href =`${prefixAdmin}/products/detail/${product._id}`
+                      class="btn btn-info btn-sm ms-1"
+                    ) Chi tiết
+                    button(
+                      type="button"
+                      class="btn btn-danger btn-sm ms-1"
+                      button-delete
+                      data-id=product._id
+                    ) Xóa
   +pagination(pagination)
   form(
     id='form-change-status'

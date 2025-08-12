@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
+include ../../mixins/table-tree.pug
 
 block main
   +showAlertSuccess(5000)
@@ -75,68 +76,8 @@ block main
             th Hành động
 
         tbody
-          each item, index in records
-            tr
-              td 
-                input(
-                  type='checkbox'
-                  class='form-check-input'
-                  name='ids'
-                  value=item._id
-                )
-              td #{index + 1}
-              td
-                .product-thumbnail(
-                  style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;"
-                )
-                  img(
-                    src=item.thumbnail
-                    alt=item.title
-                    style="max-width: 100%; max-height: 100%; object-fit: contain;"
-                  )
-              td #{item.title}
-              td
-                input(
-                  type="number"
-                  value=item.position
-                  class="form-control form-control-sm"
-                  style="width: 50px;"
-                  min="1"
-                  name="position"
-                )
-              td
-                if (item.status === "active")
-                  a(
-                    href="javascript:;"
-                    class="badge text-bg-success rounded-pill"
-                    data-status="active"
-                    data-id=item.id
-                    button-change-status
-                  ) Hoạt động
-                else
-                  a(
-                    href="javascript:;"
-                    class="badge text-bg-danger rounded-pill"
-                    data-status="inactive"
-                    data-id=item.id
-                    button-change-status
-                  ) Dừng hoạt động
-              td
-                a(
-                  class="btn btn-info btn-sm"
-                  href=`${prefixAdmin}/products-category/detail/${item.id}`
-                ) Chi tiết
-                a(
-                  class="btn btn-warning btn-sm ms-1"
-                  href=`${prefixAdmin}/products-category/edit/${item.id}`
-                ) Sửa
-                button(
-                  type="button"
-                  class="btn btn-danger btn-sm ms-1"
-                  button-delete
-                  data-id=item.id
-                ) Xóa
-  +pagination(pagination)
+          +table-tree(records)  
+  //- +pagination(pagination)
   form(
     id='form-change-status'
     action=``
