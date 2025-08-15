@@ -9,7 +9,7 @@ mixin table-tree(records, level = 1)
                     name='ids'
                     value=item._id
                 )
-            td #{index + 1}
+            td #{item.position}
             td
                 .product-thumbnail(
                     style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;"
