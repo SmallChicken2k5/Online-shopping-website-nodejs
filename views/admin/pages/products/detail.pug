@@ -3,7 +3,8 @@ extends ../../layouts/default.pug
 block main
   if (product.title)
     h1(class="mb-4") #{product.title}
-
+  if (product.product_category_id)
+    div(class="mb-4") Danh mục: <b>#{productCategory.title}</b>
   if (product.price)
     div(class="mb-4") Giá: <b>#{product.price}$</b>
 
@@ -24,9 +25,9 @@ block main
     div(class="mb-4")
       span Trạng thái:
       if (product.status === "active")
-        span(class="badge badge-success") Hoạt động
+        span(style="color: #fff; background-color: #28a745; padding: 4px 8px; border-radius: 4px;") Hoạt động
       else
-        span(class="badge badge-danger") Dừng hoạt động
+        span(style="color: #fff; background-color: #dc3545; padding: 4px 8px; border-radius: 4px;") Dừng hoạt động
 
   if (product.position)
     div(class="mb-4") Vị trí: <b>#{product.position}</b>
