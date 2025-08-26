@@ -21,7 +21,8 @@ const productCategorySchema = new mongoose.Schema({
         type: String,
         slug : 'title',
         unique: true
-    }
+    },
+    deletedAt: Date
 },{
     timestamps: true
 })
