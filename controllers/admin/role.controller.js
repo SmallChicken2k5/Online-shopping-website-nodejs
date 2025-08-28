@@ -1,11 +1,11 @@
-const Roles = require('../../models/roles.model');
+const Role = require('../../models/role.model');
 const systemConfig = require('../../config/system');
 // [GET] /admin/roles
 module.exports.index = async (req, res) => {
     let find = {
         deleted: false,
     }
-    const record = await Roles.find(find);
+    const record = await Role.find(find);
 
     res.render('admin/pages/roles/index', {
         title: 'Nhóm quyền',
@@ -22,7 +22,7 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/create
 module.exports.createPost = async (req, res) => {
-    const record = new Roles(req.body);
+    const record = new Role(req.body);
     await record.save();
     res.redirect(`${systemConfig.prefixAdmin}/roles`);
 };
@@ -35,7 +35,7 @@ module.exports.edit = async (req, res) => {
             _id: id,
             deleted: false
         }
-        const record = await Roles.findOne(find);
+        const record = await Role.findOne(find);
         res.render('admin/pages/roles/edit', {
             title: 'Chỉnh sửa nhóm quyền',
             record: record,
@@ -54,7 +54,7 @@ module.exports.editPatch = async (req, res) => {
         _id: id,
         deleted: false
     }
-    const record = await Roles.findOne(find);
+    const record = await Role.findOne(find);
     if (!record) {
         req.flash('error', 'Không tìm thấy nhóm quyền');
         return res.redirect(`${systemConfig.prefixAdmin}/roles`);
@@ -74,7 +74,7 @@ module.exports.permissions = async (req, res) => {
     const find = {
         deleted: false,
     };
-    const records = await Roles.find(find);
+    const records = await Role.find(find);
     res.render('admin/pages/roles/permissions', {
         title: 'Phân quyền',
         records: records,
