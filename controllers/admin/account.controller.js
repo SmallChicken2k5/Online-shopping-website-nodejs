@@ -51,3 +51,40 @@ module.exports.createPost = async (req, res) => {
     await record.save();
     res.redirect(systemConfig.prefixAdmin + '/accounts');
 }
+
+// [GET] /admin/accounts/edit/:id
+module.exports.edit = async (req,res) => {
+    const id = req.params.id;
+    let find = {
+        deleted: false,
+        _id: id,
+    };
+    const roles = await Role.find({deleted: false});
+    const records = await Account.findOne(find);
+    res.render('admin/pages/accounts/edit',{
+        title: 'Chỉnh sửa',
+        account: records,
+        roles: roles
+    })
+}
+
+module.exports.editPatch = async (req,res) => {
+    const emailExists = await Account.findOne(
+    { 
+        _id: { $ne: req.params.id },
+        email: req.body.email,
+        deleted: false
+    });
+    if (emailExists) {
+        req.flash('error', 'Email đã tồn tại');
+        return res.redirect(req.get('Referrer') || '/');
+    }
+    if (req.body.password) {
+        req.body.password = md5(req.body.password);
+    }else {
+        delete req.body.password;
+    }
+    await Account.updateOne({_id: req.params.id}, req.body);
+    req.flash('success', 'Cập nhật thành công');
+    res.redirect(req.get('Referrer') || '/');
+}
