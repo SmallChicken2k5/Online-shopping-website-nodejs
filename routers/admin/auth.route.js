@@ -13,4 +13,7 @@ router.post(
     controller.loginPost
 );
 
+// [GET] /admin/auth/logout
+router.get('/logout', controller.logout);
+
 module.exports = router;
