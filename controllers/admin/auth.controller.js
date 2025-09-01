@@ -1,7 +1,17 @@
 const Account = require('../../models/account.model');
 const md5 = require('md5');
 const systemConfig = require('../../config/system')
-module.exports.login = (req, res) => {
+module.exports.login = async (req, res) => {
+    if (req.cookies.token) {
+        const user = await Account.findOne(
+            { 
+                token: req.cookies.token 
+            }
+        );
+        if (user) {
+            return res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+        }
+    }
     res.render('admin/pages/auth/login');
 }
 
