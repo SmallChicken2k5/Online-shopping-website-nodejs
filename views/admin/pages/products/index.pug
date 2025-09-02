@@ -4,107 +4,112 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
+include ../../mixins/error404.pug
 block main
   +showAlertSuccess(5000)
   +showAlertError(5000)
-  h1 Danh sách sản phẩm
-  
-  .card.mb-3 
-    .card-header Bộ lọc và tìm kiếm
-    .card-body 
-      .row 
-        .col-6
-          .btn-group
-            +filterStatus(buttonStatus)
-        .col-6 
-          +search(keyword)
-  .card.mb-3
-    .card-header Sắp xếp
-    .card-body
-      .row
-        .col-4
-          div(sort)
-            select(
-              class="form-control"
-              name="sort"
-              sort-select
-            )
+  if (role.permissions.includes('products_view'))
 
-              option(value="position-desc") Vị trí giảm dần
-              option(value="position-asc") Vị trí tăng dần
-              option(value="price-desc") Giá giảm dần
-              option(value="price-asc") Giá tăng dần
-              option(value="title-asc") Tiêu đề A - Z
-              option(value="title-desc") Tiêu đề Z - A
-
-            button(
-              class="btn btn-danger mt-2"
-              sort-clear
-            ) clear
-  .card.mb-3 
-    .card-header Danh sách sản phẩm
-    .card-body 
-      .row.align-items-center
-        .col
-          +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)
-        .col-auto.text-end
-          a(
-            href=`${prefixAdmin}/products/create`
-            class='btn btn-outline-success'
-          ) + Thêm mới
-          br
-          br
-  
-      table(
-        class = 'table table-hover table-sm'
-        checkbox-multi
-      )
-        thead
-          tr
-            th 
-              input(
-                type='checkbox'
-                class='form-check-input'
-                name="checkAll"
+    h1 Danh sách sản phẩm
+    
+    .card.mb-3 
+      .card-header Bộ lọc và tìm kiếm
+      .card-body 
+        .row 
+          .col-6
+            .btn-group
+              +filterStatus(buttonStatus)
+          .col-6 
+            +search(keyword)
+    .card.mb-3
+      .card-header Sắp xếp
+      .card-body
+        .row
+          .col-4
+            div(sort)
+              select(
+                class="form-control"
+                name="sort"
+                sort-select
               )
-            th STT
-            th Hình ảnh
-            th Tiêu đề
-            th Giá
-            th Vị trí
-            th Trạng thái
-            th Hành động
-        tbody
-            each product, index in products
-              tr
-                td 
-                  input(
-                    type='checkbox'
-                    class='form-check-input'
-                    name='ids'
-                    value=product._id
-                  )
-                td #{index + 1 + (pagination.currentPage - 1) * pagination.limitItems}
-                td
-                  .product-thumbnail(style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;")
-                    img(
-                      src=product.thumbnail,
-                      alt=product.title,
-                      style="max-width: 100%; max-height: 100%; object-fit: contain;"
+
+                option(value="position-desc") Vị trí giảm dần
+                option(value="position-asc") Vị trí tăng dần
+                option(value="price-desc") Giá giảm dần
+                option(value="price-asc") Giá tăng dần
+                option(value="title-asc") Tiêu đề A - Z
+                option(value="title-desc") Tiêu đề Z - A
+
+              button(
+                class="btn btn-danger mt-2"
+                sort-clear
+              ) clear
+    .card.mb-3 
+      .card-header Danh sách sản phẩm
+      .card-body 
+        .row.align-items-center
+          .col
+            +formChangeMulti(`${prefixAdmin}/products/change-multi?_method=PATCH`)
+          .col-auto.text-end
+            if (role.permissions.includes('products_create'))
+              a(
+                href=`${prefixAdmin}/products/create`
+                class='btn btn-outline-success'
+              ) + Thêm mới
+            br
+            br
+    
+        table(
+          class = 'table table-hover table-sm'
+          checkbox-multi
+        )
+          thead
+            tr
+              th 
+                input(
+                  type='checkbox'
+                  class='form-check-input'
+                  name="checkAll"
+                )
+              th STT
+              th Hình ảnh
+              th Tiêu đề
+              th Giá
+              th Vị trí
+              th Trạng thái
+              th Hành động
+          tbody
+              each product, index in products
+                tr
+                  td 
+                    input(
+                      type='checkbox'
+                      class='form-check-input'
+                      name='ids'
+                      value=product._id
                     )
-                td #{product.title}
-                td #{product.price}$
-                td 
-                  input(
-                    type='number'
-                    value=product.position
-                    class='form-control form-control-sm'
-                    style='width: 50px;'
-                    name='position'
-                    min=1
-                  )
-                td
-                    if product.status === 'active'
+                  td #{index + 1 + (pagination.currentPage - 1) * pagination.limitItems}
+                  td
+                    .product-thumbnail(style="width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #ffffff; border-radius: 6px;")
+                      img(
+                        src=product.thumbnail,
+                        alt=product.title,
+                        style="max-width: 100%; max-height: 100%; object-fit: contain;"
+                      )
+                  td #{product.title}
+                  td #{product.price}$
+                  td 
+                    input(
+                      type='number'
+                      value=product.position
+                      class='form-control form-control-sm'
+                      style='width: 50px;'
+                      name='position'
+                      min=1
+                    )
+                  td
+                    if (role.permissions.includes('products_edit'))
+                      if product.status === 'active'
                         a(
                           href="javascript:;"
                           class="badge text-bg-success rounded-pill"
@@ -112,7 +117,7 @@ block main
                           data-id=product._id
                           button-change-status 
                           ) Hoạt động
-                    else
+                      else
                         a(
                           href="javascript:;"
                           class="badge text-bg-danger rounded-pill"
@@ -120,32 +125,46 @@ block main
                           data-id=product._id
                           button-change-status 
                         ) Dừng hoạt động
-                td
-                    a(
-                      href =`${prefixAdmin}/products/edit/${product._id}`
-                      class="btn btn-warning btn-sm"
-                    ) Sửa
-                    a(
-                      href =`${prefixAdmin}/products/detail/${product._id}`
-                      class="btn btn-info btn-sm ms-1"
-                    ) Chi tiết
-                    button(
-                      type="button"
-                      class="btn btn-danger btn-sm ms-1"
-                      button-delete
-                      data-id=product._id
-                    ) Xóa
-  +pagination(pagination)
-  form(
-    id='form-change-status'
-    action=``
-    method='POST'
-    data-path=`${prefixAdmin}/products/change-status`
-  )
-  form(
-    id='form-delete-product'
-    action=``
-    method='POST'
-    data-path=`${prefixAdmin}/products/delete-product`
-  )
+                    else 
+                      if product.status === 'active'
+                        span(
+                          class="badge text-bg-success rounded-pill"
+                          ) Hoạt động
+                      else
+                        span(
+                          class="badge text-bg-danger rounded-pill"
+                        ) Dừng hoạt động
+
+                  td
+                      if (role.permissions.includes('products_edit'))
+                        a(
+                          href =`${prefixAdmin}/products/edit/${product._id}`
+                          class="btn btn-warning btn-sm"
+                        ) Sửa
+                      a(
+                        href =`${prefixAdmin}/products/detail/${product._id}`
+                        class="btn btn-info btn-sm ms-1"
+                      ) Chi tiết
+                      if (role.permissions.includes('products_delete'))
+                        button(
+                          type="button"
+                          class="btn btn-danger btn-sm ms-1"
+                          button-delete
+                          data-id=product._id
+                        ) Xóa
+    +pagination(pagination)
+    form(
+      id='form-change-status'
+      action=``
+      method='POST'
+      data-path=`${prefixAdmin}/products/change-status`
+    )
+    form(
+      id='form-delete-product'
+      action=``
+      method='POST'
+      data-path=`${prefixAdmin}/products/delete-product`
+    )
+  else
+    +error404()
   script(src="/admin/js/product.js") 

@@ -2,8 +2,6 @@ const ProductCategory = require('../../models/product-category.model');
 const systemConfig = require('../../config/system');
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
-const paginationHelper = require('../../helpers/pagination');
-const pagination = require('../../helpers/pagination');
 const createTreeHelper = require('../../helpers/createTree');
 // [GET] /admin/products-category   
 module.exports.index = async (req, res) => {
@@ -25,15 +23,6 @@ module.exports.index = async (req, res) => {
     }
 
     // End Form Search Keyword
-    // Pagination
-
-    let objectPagination = {
-        currentPage: 1,
-        limitItems: 4,
-    };
-    const countProductsCategory = await ProductCategory.countDocuments(find);
-    objectPagination = await paginationHelper(objectPagination, req.query, countProductsCategory);
-    // End Pagination
     // Sort
     const sort = {};
     if (req.query.sortKey && req.query.sortValue) {
@@ -42,7 +31,6 @@ module.exports.index = async (req, res) => {
         sort.position = 'desc';
     }
     // End Sort 
-
     const productCategory = await ProductCategory
         .find(find)
         .sort(sort);
@@ -56,7 +44,6 @@ module.exports.index = async (req, res) => {
         title: 'Danh mục sản phẩm',
         records: categoriesTree,
         buttonStatus: buttonStatus,
-        pagination: objectPagination,
     });
 
 }

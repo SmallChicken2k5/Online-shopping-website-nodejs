@@ -87,7 +87,7 @@ module.exports.permissionsPatch = async (req, res) => {
         for (const item of permissions) {
             const id = item.id;
             const permission = item.permission;
-            await Roles.updateOne(
+            await Role.updateOne(
                 { _id: id },
                 { permissions: permission }
             );
