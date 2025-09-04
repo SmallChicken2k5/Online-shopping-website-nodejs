@@ -1,0 +1,74 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+    .container.mt-5
+        .row.justify-content-center
+            .col-md-8.col-lg-6
+                .card.shadow
+                    .card-body.p-4
+                        h2.mb-4.text-center.text-primary Chỉnh sửa tài khoản của tôi
+                        form(
+                            action=`${prefixAdmin}/my-account/edit?_method=PATCH`
+                            method="POST"
+                            enctype="multipart/form-data"
+                        )
+                            .mb-3.text-center
+                                if (user.avatar)
+                                    img(src=user.avatar width="120" height="120" class="mb-3 rounded-circle border border-3 border-primary shadow-sm" upload-image-preview)
+                                else
+                                    img(src="/admin/images/avatar.png" width="120" height="120" class="mb-3 rounded-circle border border-3 border-primary shadow-sm" upload-image-preview)
+                                input.form-control.mt-2(
+                                    type="file"
+                                    name="avatar"
+                                    accept="image/*"
+                                    upload-image-input
+                                )
+                            .mb-3
+                                label.form-label(for="fullName") Họ tên *
+                                input.form-control(
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    required
+                                    value=user.fullName
+                                    placeholder="Họ tên"
+                                )
+                            .mb-3
+                                label.form-label(for="email") Email *
+                                input.form-control(
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    required
+                                    value=user.email
+                                    placeholder="Email"
+                                )
+                            .mb-3
+                                label.form-label(for="phone") Số điện thoại
+                                input.form-control(
+                                    type="text"
+                                    id="phone"
+                                    name="phone"
+                                    value=user.phone
+                                    placeholder="Số điện thoại"
+                                )
+                            .mb-3
+                                label.form-label(for="password") Mật khẩu mới
+                                input.form-control(
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Nhập mật khẩu mới nếu muốn đổi"
+                                )
+                            .mb-3
+                                label.form-label Trạng thái
+                                span.badge(
+                                    class=(user.status === "active" ? "bg-success" : "bg-danger")
+                                ) #{user.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+                            .mb-3
+                                label.form-label Phân quyền
+                                span.badge.bg-info.ms-2 #{role.title || 'Chưa phân quyền'}
+                            .d-flex.justify-content-center.mt-4
+                                button.btn.btn-primary.px-4(type="submit") Lưu thay đổi

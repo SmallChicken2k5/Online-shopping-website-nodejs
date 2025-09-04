@@ -246,9 +246,7 @@ module.exports.editPatch = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
-    if (req.file) {
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-    } else {
+    if (!req.body.thumbnail) {
         req.body.thumbnail = editProduct.thumbnail;
     }
 
