@@ -79,6 +79,7 @@ block main
               th Vị trí
               th Trạng thái
               th Người tạo
+              th Cập nhật lần cuối
               th Hành động
           tbody
               each product, index in products
@@ -139,6 +140,10 @@ block main
                   td 
                     div #{product.accountFullName}
                     +formatDate(product.createdAt)
+                  td 
+                    if product.userLastUpdated
+                      div #{product.userLastUpdated}
+                      +formatDateTime(product.updatedAt)
                   td
                     if (role.permissions.includes('products_edit'))
                       a(
