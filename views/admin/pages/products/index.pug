@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/formChangeMulti.pug
 include ../../mixins/alert.pug
 include ../../mixins/error404.pug
+include ../../mixins/moment.pug
 block main
   +showAlertSuccess(5000)
   +showAlertError(5000)
@@ -77,6 +78,7 @@ block main
               th Giá
               th Vị trí
               th Trạng thái
+              th Người tạo
               th Hành động
           tbody
               each product, index in products
@@ -134,24 +136,26 @@ block main
                         span(
                           class="badge text-bg-danger rounded-pill"
                         ) Dừng hoạt động
-
+                  td 
+                    div #{product.accountFullName}
+                    +formatDate(product.createdAt)
                   td
-                      if (role.permissions.includes('products_edit'))
-                        a(
-                          href =`${prefixAdmin}/products/edit/${product._id}`
-                          class="btn btn-warning btn-sm"
-                        ) Sửa
+                    if (role.permissions.includes('products_edit'))
                       a(
-                        href =`${prefixAdmin}/products/detail/${product._id}`
-                        class="btn btn-info btn-sm ms-1"
-                      ) Chi tiết
-                      if (role.permissions.includes('products_delete'))
-                        button(
-                          type="button"
-                          class="btn btn-danger btn-sm ms-1"
-                          button-delete
-                          data-id=product._id
-                        ) Xóa
+                        href =`${prefixAdmin}/products/edit/${product._id}`
+                        class="btn btn-warning btn-sm"
+                      ) Sửa
+                    a(
+                      href =`${prefixAdmin}/products/detail/${product._id}`
+                      class="btn btn-info btn-sm ms-1"
+                    ) Chi tiết
+                    if (role.permissions.includes('products_delete'))
+                      button(
+                        type="button"
+                        class="btn btn-danger btn-sm ms-1"
+                        button-delete
+                        data-id=product._id
+                      ) Xóa
     +pagination(pagination)
     form(
       id='form-change-status'

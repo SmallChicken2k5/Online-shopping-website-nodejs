@@ -1,4 +1,5 @@
 const product = require('../../models/product.model')
+const Account = require('../../models/account.model')
 const ProductCategory = require('../../models/product-category.model');
 const filterStatusHelper = require('../../helpers/filterStatus')
 const searchHelper = require('../../helpers/search')
@@ -46,11 +47,22 @@ module.exports.index = async (req, res) => {
         sort.position = 'desc';
     }
     // End Sort
+
     const products = await product
         .find(find)
         .sort(sort)
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
+
+    for (let prod of products) {
+        const user = await Account.findOne({
+            _id : prod.createdBy.account_id
+        })
+        if (user){
+            prod.accountFullName = user.fullName;
+        }
+    }
+    
     res.render('admin/pages/products', {
         title: 'Product Management',
         products: products,
@@ -83,7 +95,10 @@ module.exports.changeMulti = async (req, res) => {
         case 'delete-all':
             await product.updateMany({ _id: { $in: ids } }, {
                 deleted: true,
-                deletedAt: new Date(),
+                deletedBy: {
+                    account_id: res.locals.user.id,
+                    deletedAt: new Date(),
+                }
             });
             break;
         case 'change-position':
@@ -110,7 +125,10 @@ module.exports.deleteProduct = async (req, res) => {
     const id = req.params.id;
     await product.updateOne({ _id: id }, {
         deleted: true,
-        deletedAt: new Date(),
+        deletedBy: {
+            account_id: res.locals.user.id,
+            deletedAt: new Date(),
+        }
     })
     req.flash('success', 'Sản phẩm đã được xóa thành công');
     res.redirect(req.get('Referrer') || '/')
@@ -140,11 +158,9 @@ module.exports.createPost = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
-    // if (req.file) {
-    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
-    // } else {
-    //     req.body.thumbnail = '';
-    // }
+    req.body.createdBy = {
+        account_id: res.locals.user.id,
+    }
     newProduct = new product(req.body);
     await newProduct.save();
     res.redirect(`${systemConfig.prefixAdmin}/products`);
