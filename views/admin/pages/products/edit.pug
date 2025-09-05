@@ -11,8 +11,8 @@ block main
     method="POST" 
     enctype="multipart/form-data"
   )
-    div(class="form-group")
-      label(for="title") Tiêu đề
+    div(class="mb-3")
+      label(for="title" class="form-label") Tiêu đề
       input(
         type="text"
         class="form-control"
@@ -21,18 +21,35 @@ block main
         value=product.title
         required
       )
-    div(class="form-group")
-      label(for="product_category_id") Danh mục
+    div(class="mb-3")
+      label(for="product_category_id" class="form-label") Danh mục
       select(
         name='product_category_id'
         id='product_category_id'
-        class='form-control'
+        class='form-select'
       )
         option(value='' disabled selected) -- Chọn danh mục ---
           if (categoriesTree)
             +select-tree(categoriesTree,1,product.product_category_id)
-    div(class="form-group")
-      label(for="desc") Mô tả
+    div(class="form-check form-check-inline mb-3")
+      input.form-check-input(
+        type='radio'
+        id='featured1'
+        name='featured'
+        value='1'
+      )
+      label.form-check-label(for='featured1') Nổi bật
+    div(class="form-check form-check-inline mb-3")
+      input.form-check-input(
+        type='radio'
+        id='featured0'
+        name='featured'
+        value='0'
+        checked
+      )
+      label.form-check-label(for='featured0') Không nổi bật
+    div(class="mb-3")
+      label(for="desc" class="form-label") Mô tả
       textarea(
         class="form-control"
         id="desc"
@@ -40,8 +57,8 @@ block main
         rows="5"
         textarea-mce
       ) !{product.description}
-    div(class="form-group")
-      label(for="price") Giá
+    div(class="mb-3")
+      label(for="price" class="form-label") Giá
       input(
         type="number"
         class="form-control"
@@ -51,8 +68,8 @@ block main
         min="0"
         step="0.01"
       )
-    div(class="form-group")
-      label(for="discount") % Giảm giá
+    div(class="mb-3")
+      label(for="discount" class="form-label") % Giảm giá
       input(
         type="number"
         class="form-control"
@@ -62,8 +79,8 @@ block main
         min="0"
         step="0.01"
       )
-    div(class="form-group")
-      label(for="stock") Số lượng
+    div(class="mb-3")
+      label(for="stock" class="form-label") Số lượng
       input(
         type="number"
         class="form-control"
@@ -73,10 +90,10 @@ block main
         min="0"
       )
     div(
-      class="form-group"
+      class="mb-3"
       upload-image
     )
-      label(for="thumbnail") Ảnh
+      label(for="thumbnail" class="form-label") Ảnh
       input(
         type="file"
         class="form-control"
@@ -95,11 +112,11 @@ block main
         )
         button(
           type="button"
-          class="upload-image-clear d-none"
+          class="btn btn-outline-secondary upload-image-clear d-none"
           upload-image-clear
         ) ×
-    div(class="form-group")
-      label(for="position") Vị trí
+    div(class="mb-3")
+      label(for="position" class="form-label") Vị trí
       input(
         type="number"
         class="form-control"
@@ -109,7 +126,7 @@ block main
         min="1"
         value = product.position
       )
-    div(class="form-group form-check form-check-inline")
+    div(class="form-check form-check-inline mb-3")
       input(
         type="radio"
         class="form-check-input"
@@ -119,7 +136,7 @@ block main
         checked = (product.status === 'active' ? true : false)
       )
       label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
+    div(class="form-check form-check-inline mb-3")
       input(
         type="radio"
         class="form-check-input"
@@ -129,7 +146,7 @@ block main
         checked = (product.status === 'inactive' ? true : false)
       )
       label(for="statusInActive" class="form-check-label") Dừng hoạt động
-    div(class="form-group")
+    div(class="mb-3")
       button(
         type="submit"
         class="btn btn-primary"

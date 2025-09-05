@@ -4,7 +4,7 @@ include ../../mixins/select-tree.pug
 block main
   +showAlertError(5000)
   +showAlertSuccess(5000)
-  h1(class="mb-4") Thêm mới sản phẩm
+  h1.mb-4 Thêm mới sản phẩm
 
   form(
     action=`${prefixAdmin}/products/create`
@@ -12,121 +12,118 @@ block main
     method="POST"
     enctype="multipart/form-data"
   )
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
+    div.mb-3
+      label.form-label(for="title") Tiêu đề
+      input.form-control(
         type="text"
-        class="form-control"
         id="title"
         name="title"
         required
       )
-    div(class="form-group")
-      label(for="product_category_id") Danh mục
-      select(
+    div.mb-3
+      label.form-label(for="product_category_id") Danh mục
+      select.form-select(
         name='product_category_id'
         id='product_category_id'
-        class='form-control'
       )
         option(value='' disabled selected) -- Chọn danh mục ---
           if (categoriesTree)
             +select-tree(categoriesTree)
-    div(class="form-group")
-      label(for="desc") Mô tả
-      textarea(
-        class="form-control"
+    div.form-check.form-check-inline
+      input.form-check-input(
+        type='radio'
+        id='featured1'
+        name='featured'
+        value='1'
+      )
+      label.form-check-label(for='featured1') Nổi bật
+    div.form-check.form-check-inline
+      input.form-check-input(
+        type='radio'
+        id='featured0'
+        name='featured'
+        value='0'
+        checked
+      )
+      label.form-check-label(for='featured0') Không nổi bật
+    div.mb-3
+      label.form-label(for="desc") Mô tả
+      textarea.form-control(
         id="desc"
         name="description"
         rows="5"
         textarea-mce
       )
-    div(class="form-group")
-      label(for="price") Giá
-      input(
+    div.mb-3
+      label.form-label(for="price") Giá
+      input.form-control(
         type="number"
-        class="form-control"
         id="price"
         name="price"
         value="0"
         min="0"
       )
-    div(class="form-group")
-      label(for="discount") % Giảm giá
-      input(
+    div.mb-3
+      label.form-label(for="discount") % Giảm giá
+      input.form-control(
         type="number"
-        class="form-control"
         id="discount"
         name="discountPercentage"
         value="0"
         min="0"
       )
-    div(class="form-group")
-      label(for="stock") Số lượng
-      input(
+    div.mb-3
+      label.form-label(for="stock") Số lượng
+      input.form-control(
         type="number"
-        class="form-control"
         id="stock"
         name="stock"
         value="0"
         min="0"
       )
-    div(
-      class="form-group"
-      upload-image
-    )
-      label(for="thumbnail") Ảnh
-      input(
+    div.mb-3(upload-image)
+      label.form-label(for="thumbnail") Ảnh
+      input.form-control(
         type="file"
-        class="form-control"
         id="thumbnail"
         name="thumbnail"
         accept="image/*"
         upload-image-input
       )
-      div(
-        class = "upload-image-wrapper"
-      )
-        img(
-          class="img-thumbnail image-preview" 
+      div.upload-image-wrapper
+        img.img-thumbnail.image-preview(
           src=""
           upload-image-preview
         )
-        button(
+        button.btn.btn-outline-secondary.btn-sm.upload-image-clear.d-none(
           type="button"
-          class="upload-image-clear d-none"
           upload-image-clear
         ) ×
-    div(class="form-group")
-      label(for="position") Vị trí
-      input(
+    div.mb-3
+      label.form-label(for="position") Vị trí
+      input.form-control(
         type="number"
-        class="form-control"
         id="position"
         name="position"
         placeholder="Tự động tăng"
         min="1"
       )
-    div(class="form-group form-check form-check-inline")
-      input(
+    div.form-check.form-check-inline
+      input.form-check-input(
         type="radio"
-        class="form-check-input"
         id="statusActive"
         name="status"
         value="active"
         checked
       )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
+      label.form-check-label(for="statusActive") Hoạt động
+    div.form-check.form-check-inline
+      input.form-check-input(
         type="radio"
-        class="form-check-input"
         id="statusInActive"
         name="status"
         value="inactive"
       )
-      label(for="statusInActive" class="form-check-label") Dừng hoạt động
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+      label.form-check-label(for="statusInActive") Dừng hoạt động
+    div.mb-3
+      button.btn.btn-primary(type="submit") Tạo mới
