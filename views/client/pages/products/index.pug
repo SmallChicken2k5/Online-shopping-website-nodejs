@@ -6,8 +6,14 @@ block main
     +showAlertSuccess('3000')
     +showAlertError('3000')
     .container.mt-5
-        +box-head('Danh sách sản phẩm test', 'Dưới đây là các sản phẩm hiện có trong cửa hàng của chúng tôi.')
+        +box-head('Danh sách sản phẩm test', 'Dưới đây là các sản phẩm nổi bật có trong cửa hàng của chúng tôi.')
 
         +product-grid(products)
+    
+
+    .container.mt-5
+        +box-head('Sản Phẩm Mới', 'Dưới đây là các sản phẩm mới nhất hiện có trong cửa hàng của chúng tôi.')
+
+        +product-grid(productNew)
 
 

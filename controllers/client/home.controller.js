@@ -9,9 +9,16 @@ module.exports.index = async (req,res) => {
         status: 'active',
         featured: '1'
     }).limit(6);
-    const discountedProducts = productsHelper.discountedPrice(productFeatured);
+    const discountedProductsFeatured = productsHelper.discountedPrice(productFeatured);
+
+    const productNew = await Product.find({
+        deleted: false,
+        status: 'active',
+    }).sort({position: 'desc'}).limit(6);
+    const discountedProductsNew = productsHelper.discountedPrice(productNew);
     res.render('client/pages/home/index',{
         title : 'Trang Chủ',
-        productFeatured: discountedProducts
+        productFeatured: discountedProductsFeatured,
+        productNew: discountedProductsNew
     });
 }

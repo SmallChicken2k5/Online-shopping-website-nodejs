@@ -6,6 +6,11 @@ block main
     +showAlertSuccess('3000')
     +showAlertError('3000')
     .container.mt-5
-        +box-head('Sản Phẩm Nổi Bật', 'Dưới đây là các sản phẩm hiện có trong cửa hàng của chúng tôi.')
+        +box-head('Sản Phẩm Nổi Bật', 'Dưới đây là các sản phẩm nổi bật trong cửa hàng của chúng tôi.')
 
         +product-grid(productFeatured)
+
+    .container.mt-5 
+        +box-head('Sản Phẩm Mới', 'Dưới đây là các sản phẩm mới nhất trong cửa hàng của chúng tôi.')
+
+        +product-grid(productNew)
