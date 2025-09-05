@@ -1,3 +1,5 @@
 mixin box-head(title, description)
-    h1.mb-4 #{title}
-    p.text-muted #{description}
+    .box-head-container.mb-4.p-3.bg-light.rounded.shadow-sm
+        h1.display-6.mb-2.text-primary.fw-bold #{title}
+        if description
+            p.text-muted.mb-0 !{description}

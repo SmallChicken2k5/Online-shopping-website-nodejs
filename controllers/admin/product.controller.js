@@ -246,10 +246,6 @@ module.exports.editPatch = async (req, res) => {
     } else {
         req.body.position = parseInt(req.body.position);
     }
-    if (!req.body.thumbnail) {
-        req.body.thumbnail = editProduct.thumbnail;
-    }
-
 
     try {
         const updatedBy = {

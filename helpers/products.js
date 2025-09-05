@@ -6,3 +6,8 @@ module.exports.discountedPrice = (products) => {
     });
     return discountedProducts;
 }
+
+module.exports.discountedPriceItem = (item) => {
+    const discountedPrice = item.price - (item.price * item.discountPercentage / 100);
+    return discountedPrice.toFixed(2);
+}

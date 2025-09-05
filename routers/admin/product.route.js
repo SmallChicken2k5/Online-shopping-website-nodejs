@@ -32,6 +32,7 @@ router.get(
 router.patch(
     '/edit/:id',
     upload.single('thumbnail'),
+    uploadCloud.upload,
     validate.createPost,
     controller.editPatch
 )
