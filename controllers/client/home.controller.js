@@ -1,16 +1,17 @@
 const ProductCategory = require('../../models/product-category.model');
 const createTreeHelper = require('../../helpers/createTree');
-
+const Product = require('../../models/product.model');
+const productsHelper = require('../../helpers/products');
 // [GET] /
 module.exports.index = async (req,res) => {
-    const find = {
+    const productFeatured = await Product.find({
         deleted: false,
-        status: 'active'
-    }
-    const productCategory = await ProductCategory.find(find);
-    let categoriesTree = createTreeHelper(productCategory);
+        status: 'active',
+        featured: '1'
+    }).limit(6);
+    const discountedProducts = productsHelper.discountedPrice(productFeatured);
     res.render('client/pages/home/index',{
         title : 'Trang Chủ',
-        layoutProductCategory: categoriesTree
+        productFeatured: discountedProducts
     });
 }

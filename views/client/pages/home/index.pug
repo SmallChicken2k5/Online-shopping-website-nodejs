@@ -1,4 +1,11 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+include ../../mixins/product-grid.pug
 block main  
-    
+    +showAlertSuccess('3000')
+    +showAlertError('3000')
+    .container.mt-5
+        +box-head('Sản Phẩm Nổi Bật', 'Dưới đây là các sản phẩm hiện có trong cửa hàng của chúng tôi.')
+
+        +product-grid(productFeatured)
