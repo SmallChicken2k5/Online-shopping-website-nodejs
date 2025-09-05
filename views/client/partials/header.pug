@@ -1,14 +1,18 @@
-header
-    nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
-        .container
-            a.navbar-brand(href="#") MyWebsite
-            button.navbar-toggler(type="button", data-bs-toggle="collapse", data-bs-target="#navbarNav", aria-controls="navbarNav", aria-expanded="false", aria-label="Toggle navigation")
-                span.navbar-toggler-icon
-            #navbarNav.collapse.navbar-collapse
-                ul.navbar-nav.ms-auto
-                    li.nav-item
-                        a.nav-link.active(aria-current="page", href="/") Home
-                    li.nav-item
-                        a.nav-link(href="/products") Products
-                    li.nav-item
-                        a.nav-link(href="#contact") Contact
+include ../mixins/sub-menu
+header.header
+  .container
+    .row.align-items-center
+      .col-3
+        .inner-logo
+          a(href="/")
+            img(src="/images/ich.webp", alt="Logo", style="max-width:100%;height:auto;display:block;")
+
+      .col-9
+        .inner-menu
+          ul
+            li
+              a(href="/") Trang chủ
+            li(class="sub-menu")
+              -const pathProduct = '/products'
+              a(href=pathProduct) Sản phẩm
+              +sub-menu(layoutProductCategory,pathProduct)
