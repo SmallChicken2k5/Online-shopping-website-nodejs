@@ -88,3 +88,31 @@ module.exports.delete = async (req, res) => {
     req.flash('success', 'Xoá sản phẩm khỏi giỏ hàng thành công');
     res.redirect(req.get('Referrer') || '/')
 }
+
+// [GET] /cart/update/:productId/:quantity
+module.exports.update = async (req, res) => {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.productId;
+    const quantity = parseInt(req.params.quantity);
+    const product = await Product.findOne(
+        {
+            _id: productId,
+            deleted: false,
+            status: 'active'
+        });
+    if (product.stock < quantity) {
+        req.flash('error', 'Số lượng sản phẩm trong kho không đủ');
+        return res.redirect(req.get('Referrer') || '/');
+    }
+    await Cart.updateOne({
+        _id: cartId,
+        "products.product_id": productId
+    },{
+        $set: {
+            "products.$.quantity": quantity
+        }
+    })
+
+    req.flash('success', 'Cập nhật số lượng sản phẩm thành công');
+    res.redirect(req.get('Referrer') || '/')
+}
