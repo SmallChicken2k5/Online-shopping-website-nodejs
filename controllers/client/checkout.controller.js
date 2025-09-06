@@ -65,6 +65,7 @@ module.exports.orderPost = async (req, res) => {
         products: products
     };
     
+    console.log(objectOrder);
     const order = new Order(objectOrder);
     await order.save();
 
@@ -77,4 +78,29 @@ module.exports.orderPost = async (req, res) => {
     });
 
     res.redirect(`/checkout/success/${order.id}`);
+}
+
+// [GET] /checkout/success/:id
+module.exports.success = async (req, res) => {
+    const orderId = req.params.id;
+    const order = await Order.findOne({
+        _id: orderId
+    })
+    let totalPrice = 0;
+    for (const product of order.products) {
+        const productInfo = await Product.findOne({
+            _id: product.product_id
+        }).select('title thumbnail');
+
+        product.productInfo = productInfo;
+
+        product.priceNew = productsHelper.discountedPriceItem(product);
+        product.totalPrice = product.quantity * product.priceNew;
+        totalPrice += product.totalPrice;
+    }
+    res.render('client/pages/checkout/success', {
+        title: 'Đặt Hàng Thành Công',
+        order: order,
+        totalPrice: totalPrice
+    });
 }

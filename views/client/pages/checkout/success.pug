@@ -1,0 +1,76 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.py-4
+    .row.mb-4
+      .col-12
+        +box-head(title)
+
+    .row.justify-content-center
+      .col-md-8
+        .alert.alert-success.d-flex.align-items-center
+          i(class="bi bi-check-circle-fill me-2 fs-4")
+          span Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất.
+
+    if(order)
+      .row.justify-content-center
+        .col-md-8
+          .card.mb-4
+            .card-header.bg-primary.text-white
+              h5.mb-0 Thông tin cá nhân
+            .card-body
+              table.table.table-bordered.mb-0
+                tbody
+                  tr
+                    td.w-25 Họ tên
+                    td
+                      b #{order.userInfo.fullName}
+                  tr
+                    td Số điện thoại
+                    td
+                      b #{order.userInfo.phone}
+                  tr
+                    td Địa chỉ
+                    td
+                      b #{order.userInfo.address}
+
+      .row.justify-content-center
+        .col-md-8
+          .card
+            .card-header.bg-success.text-white
+              h5.mb-0 Thông tin đơn hàng
+            .card-body.p-0
+              table.table.table-hover.mb-0
+                thead.table-light
+                  tr
+                    th.text-center(style="width: 50px") STT
+                    th.text-center Ảnh
+                    th Tên
+                    th.text-end Giá
+                    th.text-center Số lượng
+                    th.text-end Tổng tiền
+                tbody
+                  if(order.products.length > 0)
+                    each item, index in order.products
+                      tr
+                        td.text-center #{index + 1}
+                        td.text-center
+                          img(
+                            src=item.productInfo.thumbnail
+                            alt=item.productInfo.title
+                            class="img-thumbnail"
+                            style="width: 80px; height: auto;"
+                          )
+                        td #{item.productInfo.title}
+                        td.text-end #{item.priceNew}$
+                        td.text-center #{item.quantity}
+                        td.text-end #{item.totalPrice}$
+                  else
+                    tr
+                      td(colspan="6" class="text-center text-muted") Không có sản phẩm nào trong đơn hàng.
+
+              if(order.products.length > 0)
+                .card-footer.bg-light.text-end
+                  h5.mb-0 Tổng đơn hàng: 
+                    span.text-success #{totalPrice}$
