@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+    .container.my-3
+        .row
+            .col-8.mx-auto
+                +box-head(title)
+
+                form(
+                    action="/user/login"
+                    method="POST"
+                )
+                    .mb-3
+                        label(for="email" class="form-label") Email
+                        input(
+                            type="email"
+                            class="form-control"
+                            id="email"
+                            name="email"
+                            required
+                        )
+                    .mb-3
+                        label(for="password" class="form-label") Mật khẩu
+                        input(
+                            type="password"
+                            class="form-control"
+                            id="password"
+                            name="password"
+                            required
+                        )
+                    .mb-3
+                        button(
+                            type="submit"
+                            class="btn btn-primary w-100"
+                        ) Đăng nhập
