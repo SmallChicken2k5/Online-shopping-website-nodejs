@@ -28,3 +28,53 @@ module.exports.index = async (req, res) => {
         cartDetail: cart
     });
 }
+
+// [POST] /checkout/order
+module.exports.orderPost = async (req, res) => {
+    const cartId = req.cookies.cartId;
+    const userInfo = req.body;
+
+    const cart = await Cart.findOne(
+        {
+            _id: cartId
+        }
+    );
+
+    let products = [];
+
+    for (let item of cart.products){
+        const objectProduct = {
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: 0,
+            discountPercentage: 0
+        };
+        const productInfo = await Product.findOne({
+            _id: item.product_id,
+            deleted: false,
+            status: 'active'
+        });
+        objectProduct.price = productInfo.price;
+        objectProduct.discountPercentage = productInfo.discountPercentage;
+        products.push(objectProduct);
+    }
+    
+    const objectOrder = {
+        cart_id: cartId,
+        userInfo: userInfo,
+        products: products
+    };
+    
+    const order = new Order(objectOrder);
+    await order.save();
+
+    await Cart.updateOne({
+        _id: cartId
+    },{
+        $set: {
+            products: []
+        }
+    });
+
+    res.redirect(`/checkout/success/${order.id}`);
+}
