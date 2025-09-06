@@ -6,8 +6,19 @@ header.header
         .inner-logo
           a(href="/")
             img(src="/images/ich.webp", alt="Logo", style="max-width:100%;height:auto;display:block;")
-
-      .col-9
+      .col-5
+        form(
+          action='/search',
+          method='GET'
+        )
+          .input-group.mb-0
+            input.form-control(
+              type='text',
+              placeholder='Tìm kiếm sản phẩm...',
+              name='keyword'
+            )
+            button.btn.btn-primary(type='submit') Tìm
+      .col-4
         .inner-menu
           ul
             li
