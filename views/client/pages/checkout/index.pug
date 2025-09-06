@@ -1,0 +1,63 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-3
+        .row
+            .col-12
+                +box-head("Thông tin đơn hàng")
+
+        .row
+            .col-12
+                .table-responsive
+                    table.table.table-bordered.table-hover.align-middle
+                        thead.table-dark
+                            tr
+                                th.text-center STT
+                                th.text-center Ảnh
+                                th Tên
+                                th.text-center Giá
+                                th.text-center Số lượng
+                                th.text-center Tổng tiền
+                        tbody
+                            if(cartDetail.products.length > 0)
+                                each product, index in cartDetail.products
+                                    tr
+                                        td.text-center #{index + 1}
+                                        td.text-center
+                                            img.rounded(
+                                                src=product.productInfo.thumbnail
+                                                alt=product.productInfo.title
+                                                width="80"
+                                                height="80"
+                                                style="object-fit:cover"
+                                            )
+                                        td
+                                            a.text-decoration-none.text-dark(
+                                                href=`/products/detail/${product.productInfo.slug}`
+                                            ) #{product.productInfo.title}
+                                        td.text-center
+                                            span.badge.bg-primary #{product.productInfo.newPrice}$
+                                        td.text-center
+                                            span.badge.bg-secondary #{product.quantity}
+                                        td.text-center
+                                            span.badge.bg-success #{product.totalPrice}$
+                            else
+                                tr
+                                    td.text-center(colspan="7")
+                                        em.text-muted Chưa có sản phẩm nào trong giỏ hàng.
+
+            .row
+                .col-12
+                    .card.p-4.my-4
+                        form(action="/checkout/order", method="POST")
+                            .mb-3
+                                label.form-label(for="fullName") Họ tên
+                                input.form-control(type="text", id="fullName", name="fullName", required)
+                            .mb-3
+                                label.form-label(for="phone") Số điện thoại
+                                input.form-control(type="text", id="phone", name="phone", required)
+                            .mb-3
+                                label.form-label(for="address") Địa chỉ
+                                input.form-control(type="text", id="address", name="address", required)
+                            button.btn.btn-success.w-100(type="submit") ĐẶT HÀNG
