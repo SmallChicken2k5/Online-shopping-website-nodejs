@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-4
+        .row
+            .col-12
+                +box-head("Giỏ hàng")
+
+        .row
+            .col-12
+                .table-responsive
+                    table.table.table-bordered.table-hover.align-middle
+                        thead.table-dark
+                            tr
+                                th.text-center STT
+                                th.text-center Ảnh
+                                th Tên
+                                th.text-center Giá
+                                th.text-center Số lượng
+                                th.text-center Tổng tiền
+                                th.text-center Hành động
+                        tbody
+                            if(cartDetail.products.length > 0)
+                                each product, index in cartDetail.products
+                                    tr
+                                        td.text-center #{index + 1}
+                                        td.text-center
+                                            img.rounded(
+                                                src=product.productInfo.thumbnail
+                                                alt=product.productInfo.title
+                                                width="80"
+                                                height="80"
+                                                style="object-fit:cover"
+                                            )
+                                        td
+                                            a.text-decoration-none.text-dark(
+                                                href=`/products/detail/${product.productInfo.slug}`
+                                            ) #{product.productInfo.title}
+                                        td.text-center
+                                            span.badge.bg-primary #{product.productInfo.newPrice}$
+                                        td.text-center
+                                            input.form-control.form-control-sm.d-inline-block(
+                                                type="number"
+                                                name="quantity"
+                                                value=product.quantity
+                                                min="1"
+                                                product-id=product.product_id
+                                                style="width: 70px"
+                                            )
+                                        td.text-center
+                                            span.badge.bg-success #{product.totalPrice}$
+                                        td.text-center
+                                            a.btn.btn-sm.btn-danger(
+                                                href=`/cart/delete/${product.product_id}`
+                                            )
+                                                i.bi.bi-trash.me-1
+                                                | Xóa
+                            else
+                                tr
+                                    td.text-center(colspan="7")
+                                        em.text-muted Chưa có sản phẩm nào trong giỏ hàng.
+
+                if(cartDetail.products.length > 0)
+                    .row.mt-4
+                        .col-12.text-end
+                            h4 Tổng đơn hàng: 
+                                span.badge.bg-warning.text-dark #{cartDetail.totalPrice}$
+                            a.btn.btn-success.btn-lg.ms-3(href="/checkout")
+                                i.bi.bi-cart-check.me-1
+                                | TIẾN HÀNH ĐẶT HÀNG
