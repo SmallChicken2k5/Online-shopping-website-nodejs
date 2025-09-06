@@ -1,7 +1,10 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 //- // sử dụng full boostrap
 block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
     .product-detail
         .container.my-5
             .row.g-5
