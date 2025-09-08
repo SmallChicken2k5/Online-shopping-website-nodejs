@@ -62,11 +62,16 @@ module.exports.loginPost = async (req , res) => {
     }
     res.cookie('tokenUser', user.tokenUser);
 
-    await Cart.updateOne({
-        _id: req.cookies.cartId
-    }, {
-        user_id: user.id
-    });
+    // Tìm cart đã có user_id
+    const cartCurrent = await Cart.findOne({ _id: req.cookies.cartId });
+    const cartOfUser = await Cart.findOne({ user_id: user.id, _id: { $ne: cartCurrent?._id } });
+
+    if (cartOfUser) {
+        res.cookie('cartId', cartOfUser.id);
+        await Cart.deleteOne({ _id: cartCurrent._id });
+    } else {
+        await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
+    }
 
     res.redirect('/');
 }

@@ -2,7 +2,8 @@ const Cart = require('../../models/cart.model');
 
 module.exports.cartId = async (req, res, next) => {
     if (!req.cookies.cartId) {
-        const cart = new Cart();
+        const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
+        const cart = new Cart({ ip: ipAddress });
         await cart.save();
 
         const expiresTime = 1000 * 60 * 60 * 24 * 365;
@@ -15,7 +16,8 @@ module.exports.cartId = async (req, res, next) => {
             _id: req.cookies.cartId
         })
         if (!cart) {
-            const cart = new Cart();
+            const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
+            const cart = new Cart({ ip: ipAddress });
             await cart.save();
 
             const expiresTime = 1000 * 60 * 60 * 24 * 365;

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const cartSchema = new mongoose.Schema({
     user_id: String,
+    ip: String,
     products: [
         {
             product_id: String,

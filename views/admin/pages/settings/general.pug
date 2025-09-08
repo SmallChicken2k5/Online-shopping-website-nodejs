@@ -1,0 +1,77 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+    h1 Cài đặt chung
+
+    form(
+        action=`${prefixAdmin}/settings/general?_method=PATCH`
+        method="POST"
+        enctype="multipart/form-data"
+    )
+        div(class="mb-3")
+            label(for="websiteName" class="form-label") Tên website
+            input(
+                type="text"
+                class="form-control"
+                id="websiteName"
+                name="websiteName"
+                value=(setting ? setting.websiteName : "")
+            )
+        div(class="mb-3" upload-image)
+            label(for="logo" class="form-label") Logo
+            input(
+                type="file"
+                class="form-control"
+                id="logo"
+                name="logo"
+                accept="image/*"
+                upload-image-input
+            )
+            img(
+                src=(setting ? setting.logo : "")
+                class="img-thumbnail mt-2 image-preview"
+                upload-image-preview
+            )
+        div(class="mb-3")
+            label(for="phone" class="form-label") Số điện thoại
+            input(
+                type="text"
+                class="form-control"
+                id="phone"
+                name="phone"
+                value=(setting ? setting.phone : "")
+            )
+        div(class="mb-3")
+            label(for="email" class="form-label") Email
+            input(
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                value=(setting ? setting.email : "")
+            )
+        div(class="mb-3")
+            label(for="address" class="form-label") Địa chỉ
+            input(
+                type="text"
+                class="form-control"
+                id="address"
+                name="address"
+                value=(setting ? setting.address : "")
+            )
+        div(class="mb-3")
+            label(for="copyright" class="form-label") Copyright
+            input(
+                type="text"
+                class="form-control"
+                id="copyright"
+                name="copyright"
+                value=(setting ? setting.copyright : "")
+            )
+        div(class="mb-3")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Cập nhật
