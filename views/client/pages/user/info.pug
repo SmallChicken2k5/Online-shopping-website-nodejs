@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+    .container.my-4
+        .row.justify-content-center
+            .col-md-8.col-lg-6
+                +box-head-center("Thông tin tài khoản")
+                .card.shadow-sm.mt-3
+                    .card-body
+                        .d-flex.align-items-center.flex-column
+                            // Avatar
+                            .mb-3
+                                img.rounded-circle.shadow(style="width:100px;height:100px;object-fit:cover;" src=(user.avatar || '/images/default-avatar.png') alt="Avatar")
+                            // Name
+                            h4.mt-2.mb-1.text-primary #{user.fullName}
+                            p.text-muted.mb-3 #{user.email}
+                        hr
+                        .row
+                            .col-12.mb-3
+                                label.form-label.text-muted(for="fullName") Họ và tên
+                                div#fullName.form-control.bg-light #{user.fullName}
+                            .col-12.mb-3
+                                label.form-label.text-muted(for="email") Email
+                                div#email.form-control.bg-light #{user.email}
