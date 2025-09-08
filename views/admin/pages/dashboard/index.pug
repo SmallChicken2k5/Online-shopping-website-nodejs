@@ -1,15 +1,151 @@
 extends ../../layouts/default.pug
+include ../../mixins/alert.pug
 
+block main
+    +showAlertSuccess(4000)
+    +showAlertError(4000)
 
-block main 
-    h1 Chào mừng bạn đến với trang quản trị!
-    p Đây là trang dashboard dành cho quản trị viên. Bạn có thể quản lý sản phẩm, đơn hàng và người dùng tại đây.
-    ul
-        li Quản lý sản phẩm
-        li Quản lý đơn hàng
-        li Quản lý người dùng
-    div #{user}
-    div #{role}
+    .d-flex.align-items-center.mb-4
+        h1.h3.mb-0.me-3 Dashboard
+        span.badge.bg-primary.fw-normal PX Admin
 
-    
-    
+    //- Account / Profile
+    .row.g-4
+        .col-12.col-lg-4
+            .card.h-100.shadow-sm
+                .card-header.bg-white.fw-semibold Thông tin tài khoản
+                .card-body
+                    .d-flex.align-items-start
+                        if user.avatar
+                            img(src=user.avatar alt="Avatar" class="rounded me-3" style="width:72px;height:72px;object-fit:cover;")
+                        else
+                            .rounded.bg-secondary.bg-opacity-25.me-3.d-flex.align-items-center.justify-content-center(
+                                style="width:72px;height:72px;"
+                            )
+                                span.text-secondary.fw-semibold #{(user.fullName && user.fullName[0]) || 'U'}
+                        .flex-grow-1
+                            if user.fullName
+                                h5.mb-1 #{user.fullName}
+                            if user.email
+                                small.d-block.text-muted #{user.email}
+                            if user.phone
+                                small.d-block.text-muted #{user.phone}
+                            if role.title
+                                span.badge.bg-info.mt-2 #{role.title}
+                    hr
+                    ul.list-unstyled.mb-0.small
+                        li.d-flex.justify-content-between
+                            span ID
+                            code #{user._id}
+                        li.d-flex.justify-content-between.mt-1
+                            span Trạng thái
+                            if user.status=='active'
+                                span.badge.bg-success Active
+                            else
+                                span.badge.bg-secondary Inactive
+
+        //- Quick stats cards
+        .col-12.col-lg-8
+            .row.g-3
+                //- Helper calculations
+                - const safePct = (a,b)=> ((b? (a/b*100):0).toFixed(0))
+                - const pcAP = safePct(statistic.productCategory.active, statistic.productCategory.total)
+                - const pAP  = safePct(statistic.product.active, statistic.product.total)
+                - const adAP = safePct(statistic.account.active, statistic.account.total)
+                - const usAP = safePct(statistic.user.active, statistic.user.total)
+
+                .col-6.col-xl-3
+                    .card.border-0.shadow-sm.position-relative.h-100
+                        .card-body
+                            small.text-uppercase.text-muted.mb-1.d-block Danh mục
+                            h4.mb-0 #{statistic.productCategory.total}
+                            .mt-2
+                                .progress(style="height:6px;")
+                                    .progress-bar.bg-primary(style=`width:${pcAP}%`)
+                            small.text-muted #{pcAP}% hoạt động
+                .col-6.col-xl-3
+                    .card.border-0.shadow-sm.h-100
+                        .card-body
+                            small.text-uppercase.text-muted.mb-1.d-block Sản phẩm
+                            h4.mb-0 #{statistic.product.total}
+                            .mt-2
+                                .progress(style="height:6px;")
+                                    .progress-bar.bg-success(style=`width:${pAP}%`)
+                            small.text-muted #{pAP}% hoạt động
+                .col-6.col-xl-3
+                    .card.border-0.shadow-sm.h-100
+                        .card-body
+                            small.text-uppercase.text-muted.mb-1.d-block Admin
+                            h4.mb-0 #{statistic.account.total}
+                            .mt-2
+                                .progress(style="height:6px;")
+                                    .progress-bar.bg-warning(style=`width:${adAP}%`)
+                            small.text-muted #{adAP}% hoạt động
+                .col-6.col-xl-3
+                    .card.border-0.shadow-sm.h-100
+                        .card-body
+                            small.text-uppercase.text-muted.mb-1.d-block Client
+                            h4.mb-0 #{statistic.user.total}
+                            .mt-2
+                                .progress(style="height:6px;")
+                                    .progress-bar.bg-info(style=`width:${usAP}%`)
+                            small.text-muted #{usAP}% hoạt động
+
+    //- Detailed breakdown
+    .row.g-4.mt-1
+        .col-md-6.col-xl-3
+            .card.h-100.shadow-sm
+                .card-header.bg-white.fw-semibold Danh mục sản phẩm
+                .card-body
+                    ul.list-group.list-group-flush.small
+                        li.list-group-item.d-flex.justify-content-between
+                            span Tổng
+                            b #{statistic.productCategory.total}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Hoạt động
+                            span.text-success #{statistic.productCategory.active}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Dừng
+                            span.text-danger #{statistic.productCategory.inactive}
+        .col-md-6.col-xl-3
+            .card.h-100.shadow-sm
+                .card-header.bg-white.fw-semibold Sản phẩm
+                .card-body
+                    ul.list-group.list-group-flush.small
+                        li.list-group-item.d-flex.justify-content-between
+                            span Tổng
+                            b #{statistic.product.total}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Hoạt động
+                            span.text-success #{statistic.product.active}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Dừng
+                            span.text-danger #{statistic.product.inactive}
+        .col-md-6.col-xl-3
+            .card.h-100.shadow-sm
+                .card-header.bg-white.fw-semibold Tài khoản admin
+                .card-body
+                    ul.list-group.list-group-flush.small
+                        li.list-group-item.d-flex.justify-content-between
+                            span Tổng
+                            b #{statistic.account.total}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Hoạt động
+                            span.text-success #{statistic.account.active}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Dừng
+                            span.text-danger #{statistic.account.inactive}
+        .col-md-6.col-xl-3
+            .card.h-100.shadow-sm
+                .card-header.bg-white.fw-semibold Tài khoản client
+                .card-body
+                    ul.list-group.list-group-flush.small
+                        li.list-group-item.d-flex.justify-content-between
+                            span Tổng
+                            b #{statistic.user.total}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Hoạt động
+                            span.text-success #{statistic.user.active}
+                        li.list-group-item.d-flex.justify-content-between
+                            span Dừng
+                            span.text-danger #{statistic.user.inactive}

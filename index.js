@@ -46,6 +46,11 @@ app.locals.moment = moment;
 route(app);
 adminRoute(app);
 
+app.use((req, res) => {
+    res.status(404).render('client/pages/errors/404', {
+        title: 'Trang không tồn tại'
+    });
+});
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
