@@ -1,0 +1,61 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+    .container.my-4
+        .row.justify-content-center
+            .col-md-8.col-lg-6
+                +box-head-center("Chỉnh sửa thông tin tài khoản")
+                .card.shadow-sm.mt-3
+                    .card-body
+                        form(
+                            method="POST" 
+                            action="/user/edit?_method=PATCH" 
+                            enctype="multipart/form-data"
+                            )
+                            .d-flex.align-items-center.flex-column
+                                // Avatar
+                                .mb-3.text-center
+                                    img.rounded-circle.shadow(
+                                        style="width:100px;height:100px;object-fit:cover;" 
+                                        src=(user.avatar || '/images/default-avatar.png') 
+                                        alt="Avatar"
+                                        )
+                                    input.form-control.mt-2(
+                                        type="file"
+                                        name="avatar" 
+                                        accept="image/*"
+                                        )
+                            hr
+                            .row
+                                .col-12.mb-3
+                                    label.form-label.text-muted(for="fullName") Họ và tên
+                                    input#fullName.form-control(
+                                        type="text" 
+                                        name="fullName" 
+                                        required 
+                                        value=user.fullName
+                                        )
+                                .col-12.mb-3
+                                    label.form-label.text-muted(for="email") Email
+                                    input#email.form-control(
+                                        type="email"
+                                        name="email"
+                                        required value=user.email
+                                        )
+                                .col-12.mb-3
+                                    label.form-label.text-muted(for="phone") Số điện thoại
+                                    input#phone.form-control(
+                                        type="text"
+                                        name="phone" 
+                                        value=(user.phone || '')
+                                        )
+                                .col-12.mt-2.d-flex.justify-content-end.gap-2
+                                    button.btn.btn-primary(type="submit")
+                                        i.bi.bi-save.me-1
+                                        | Lưu thay đổi
+                                    a.btn.btn-outline-secondary(href="/user/info")
+                                        i.bi.bi-arrow-left.me-1
+                                        | Quay lại

@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
-
+const generate = require('../helpers/generate');
 const orderSchema = new mongoose.Schema({
     user_id: String,
     cart_id: String,
+    code: {
+        type: String,
+        unique: true,
+        default: 'PG-' + generate.generaterandomString(6) 
+    },
     userInfo: {
         fullName: String,
         phone: String,
@@ -15,7 +20,11 @@ const orderSchema = new mongoose.Schema({
             price: Number,
             discountPercentage: Number
         }
-    ]
+    ],
+    status:{
+        type: String,
+        default: 'pending'
+    }
 },{
     timestamps: true
 })

@@ -1,28 +1,63 @@
 extends ../../layouts/auth.pug
 
 block main
-    .container.my-5
+    .container.py-5
         .row.justify-content-center
-            .col-8
-                h1.text-center Đăng nhập
-                form(
-                    action=`${prefixAdmin}/auth/login`
-                    method="POST"
-                )
-                    .mb-3
-                        label.form-label(for="email") Email
-                        input.form-control(
-                            type="email"
-                            id="email"
-                            name="email"
-                            required
+            .col-md-7.col-lg-5
+                .text-center.mb-4
+                    i.bi.bi-box-arrow-in-right.display-4.text-primary
+                    h1.h3.mt-2.mb-0 Đăng nhập
+                    p.text-muted.fs-6 Quản trị hệ thống sản phẩm
+                .card.shadow-sm.border-0
+                    .card-body.p-4
+                        form(
+                            action=`${prefixAdmin}/auth/login`
+                            method="POST"
+                            novalidate
                         )
-                    .mb-3
-                        label.form-label(for="password") Mật khẩu
-                        input.form-control(
-                            type="password"
-                            id="password"
-                            name="password"
-                            required
-                        )
-                    button.btn.btn-primary.w-100(type="submit") Đăng nhập
+                            //- Email
+                            .mb-3
+                                label.form-label.fw-medium(for="email")
+                                    i.bi.bi-envelope.me-2
+                                    | Email
+                                .input-group
+                                    span.input-group-text.bg-light
+                                        i.bi.bi-at
+                                    input.form-control(
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="name@example.com"
+                                        required
+                                        autocomplete="username"
+                                    )
+                                .form-text.text-muted Dùng email quản trị được cấp.
+                            //- Password
+                            .mb-3
+                                label.form-label.fw-medium(for="password")
+                                    i.bi.bi-shield-lock.me-2
+                                    | Mật khẩu
+                                .input-group
+                                    span.input-group-text.bg-light
+                                        i.bi.bi-lock
+                                    input#password.form-control(
+                                        type="password"
+                                        name="password"
+                                        placeholder="••••••••"
+                                        required
+                                        minlength="6"
+                                        autocomplete="current-password"
+                                    )
+                                    button.btn.btn-outline-secondary(type="button" tabindex="-1" id="togglePassword")
+                                        i.bi.bi-eye-slash#pwIcon
+                            //- Alert placeholder (server can inject)
+                            if typeof message !== 'undefined' && message
+                                .alert.alert-danger.py-2 #{message}
+                            //- Submit
+                            .d-grid.mb-3
+                                button.btn.btn-primary.btn-lg(type="submit")
+                                    i.bi.bi-box-arrow-in-right.me-2
+                                    | Đăng nhập
+                            .text-center
+                                small.text-muted
+                                    | © #{new Date().getFullYear()} Product Admin Panel

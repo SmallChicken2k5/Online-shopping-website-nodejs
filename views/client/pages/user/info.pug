@@ -25,3 +25,13 @@ block main
                             .col-12.mb-3
                                 label.form-label.text-muted(for="email") Email
                                 div#email.form-control.bg-light #{user.email}
+                            .col-12.mb-3
+                                label.form-label.text-muted(for="phone") Số điện thoại
+                                div#phone.form-control.bg-light= user.phone || 'Chưa cập nhật'
+                            .col-12.mt-2.d-flex.justify-content-end.gap-2
+                                a.btn.btn-outline-primary(href="/user/edit")
+                                    i.bi.bi-pencil.me-1
+                                    | Chỉnh sửa
+                                a.btn.btn-primary(href="/user/orders")
+                                    i.bi.bi-bag.me-1
+                                    | Xem đơn hàng

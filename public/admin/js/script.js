@@ -203,3 +203,22 @@ if (sort) {
     } 
 
 }
+
+// Visible Password
+const input = document.getElementById('password');
+const icon = document.getElementById('pwIcon');
+const toggleBtn = document.getElementById('togglePassword');
+if(input && icon && toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+        if(input.type === 'password'){
+            input.type = 'text';
+            icon.classList.remove('bi-eye-slash');
+            icon.classList.add('bi-eye');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('bi-eye');
+            icon.classList.add('bi-eye-slash');
+        }
+    });
+}
+

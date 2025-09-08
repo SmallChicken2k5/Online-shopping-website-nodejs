@@ -3,6 +3,9 @@ const router = express.Router()
 const controller = require('../../controllers/client/user.controller')
 const validate = require('../../validates/client/user.validate')
 const authMiddleware = require('../../middlewares/client/auth.middleware')
+const multer = require('multer')
+const upload = multer()
+const uploadCloud = require('../../middlewares/admin/uploadCloud.middleware');
 router.get('/register', controller.register)
 
 router.post(
@@ -63,5 +66,25 @@ router.get(
     controller.info
 )
 
+router.get(
+    '/edit',
+    authMiddleware.requireAuth,
+    controller.edit
+)
+
+router.patch(
+    '/edit',
+    upload.single('avatar'),
+    uploadCloud.upload,
+    authMiddleware.requireAuth,
+    validate.editPatch,
+    controller.editPatch
+)
+
+router.get(
+    '/orders',
+    authMiddleware.requireAuth,
+    controller.orders
+)
 module.exports = router;
 

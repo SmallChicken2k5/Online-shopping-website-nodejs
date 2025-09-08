@@ -5,13 +5,22 @@ block main
   .container.py-4
     .row.mb-4
       .col-12
-        +box-head(title)
+        +box-head-center(title)
 
     .row.justify-content-center
       .col-md-8
-        .alert.alert-success.d-flex.align-items-center
-          i(class="bi bi-check-circle-fill me-2 fs-4")
-          span Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất.
+        if(order && order.status === 'pending')
+          .alert.alert-warning.d-flex.align-items-center
+            i(class="bi bi-hourglass-split me-2 fs-4")
+            span Đơn hàng của bạn đang chờ xử lý. Vui lòng đợi xác nhận từ chúng tôi.
+        else if(order && order.status === 'accepted')
+          .alert.alert-success.d-flex.align-items-center
+            i(class="bi bi-check-circle-fill me-2 fs-4")
+            span Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất.
+        else if(order && order.status === 'denied')
+          .alert.alert-danger.d-flex.align-items-center
+            i(class="bi bi-x-circle-fill me-2 fs-4")
+            span Rất tiếc, đơn hàng của bạn đã bị từ chối. Vui lòng liên hệ hỗ trợ để biết thêm chi tiết.
 
     if(order)
       .row.justify-content-center

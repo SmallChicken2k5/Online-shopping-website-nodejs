@@ -62,3 +62,20 @@ module.exports.resetPasswordPost = (req ,res , next) => {
     }
     next();
 }
+
+module.exports.editPatch = (req ,res , next) => {
+    if (!req.body.fullName) {
+        req.flash('error', 'Họ và tên không được để trống');
+        return res.redirect(req.get('Referrer') || '/');
+    }
+    if (!req.body.email) {
+        req.flash('error', 'Email không được để trống');
+        return res.redirect(req.get('Referrer') || '/');
+    }
+    if (req.body.phone && !/^\+?[0-9]{10,15}$/.test(req.body.phone)) {
+        req.flash('error', 'Số điện thoại không hợp lệ');
+        return res.redirect(req.get('Referrer') || '/');
+    }
+    
+    next();
+}

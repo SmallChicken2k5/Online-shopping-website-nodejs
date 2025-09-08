@@ -1,18 +1,21 @@
 const User = require('../../models/user.model');
+const Product = require('../../models/product.model');
+const Order = require('../../models/order.model');
 const generate = require('../../helpers/generate');
 const ForgotPassword = require('../../models/forgot-password.model');
 const md5 = require('md5');
 const Cart = require('../../models/cart.model');
 const sendMailHelper = require('../../helpers/sendMail');
+const productsHelper = require('../../helpers/products');
 // [GET] /user/register
-module.exports.register = (req , res) => {
-    res.render('client/pages/user/register' , {
+module.exports.register = (req, res) => {
+    res.render('client/pages/user/register', {
         title: 'Đăng ký tài khoản'
     });
 }
 
 // [POST] /user/register
-module.exports.registerPost = async (req , res) => {
+module.exports.registerPost = async (req, res) => {
     const existEmail = await User.findOne({
         email: req.body.email,
         deleted: false
@@ -30,14 +33,14 @@ module.exports.registerPost = async (req , res) => {
 }
 
 // [GET] /user/login
-module.exports.login = (req , res) => {
-    res.render('client/pages/user/login' , {
+module.exports.login = (req, res) => {
+    res.render('client/pages/user/login', {
         title: 'Đăng nhập tài khoản'
     });
 }
 
 // [POST] /user/login
-module.exports.loginPost = async (req , res) => {
+module.exports.loginPost = async (req, res) => {
     const email = req.body.email;
     const password = md5(req.body.password);
     const user = await User.findOne({
@@ -77,20 +80,20 @@ module.exports.loginPost = async (req , res) => {
 }
 
 // [GET] /user/logout
-module.exports.logout = (req , res) => {
+module.exports.logout = (req, res) => {
     res.clearCookie('tokenUser');
     res.redirect(req.get('Referrer') || '/');
 }
 
 // [GET] /user/password/forgot
-module.exports.forgotPassword = (req , res) => {
-    res.render('client/pages/user/forgot-password' , {
+module.exports.forgotPassword = (req, res) => {
+    res.render('client/pages/user/forgot-password', {
         title: 'Quên mật khẩu'
     });
 }
 
 // [POST] /user/password/forgot
-module.exports.forgotPasswordPost = async (req , res) => {
+module.exports.forgotPasswordPost = async (req, res) => {
     const email = req.body.email;
     const user = await User.findOne({
         email: email,
@@ -100,7 +103,7 @@ module.exports.forgotPasswordPost = async (req , res) => {
         req.flash('error', 'Email không tồn tại');
         res.redirect(req.get('Referrer') || '/');
         return;
-    }   
+    }
 
     const existdForgotPassword = await ForgotPassword.findOne({
         email: email
@@ -144,7 +147,7 @@ module.exports.forgotPasswordPost = async (req , res) => {
 }
 
 // [GET] /user/password/otp
-module.exports.otp = (req , res) => {
+module.exports.otp = (req, res) => {
     res.render('client/pages/user/otp-password', {
         title: 'Xác nhận OTP',
         email: req.query.email
@@ -152,10 +155,10 @@ module.exports.otp = (req , res) => {
 }
 
 // [POST] /user/password/otp
-module.exports.otpPost = async (req ,res) => {
+module.exports.otpPost = async (req, res) => {
     const email = req.body.email;
     const otp = req.body.otp;
-    
+
     const result = await ForgotPassword.findOne({
         email: email,
         otp: otp
@@ -172,19 +175,19 @@ module.exports.otpPost = async (req ,res) => {
 }
 
 // [GET] /user/password/reset
-module.exports.resetPassword = (req , res) => {
+module.exports.resetPassword = (req, res) => {
     res.render('client/pages/user/reset-password', {
         title: 'Đặt lại mật khẩu'
     });
 }
 
 // [POST] /user/password/reset
-module.exports.resetPasswordPost = async (req , res) => {
+module.exports.resetPasswordPost = async (req, res) => {
     const newPassword = req.body.password;
     const tokenUser = req.cookies.tokenUser;
     await User.updateOne({
-        tokenUser : tokenUser
-    } , {
+        tokenUser: tokenUser
+    }, {
         password: md5(newPassword)
     })
     req.flash('success', 'Đặt lại mật khẩu thành công');
@@ -192,8 +195,59 @@ module.exports.resetPasswordPost = async (req , res) => {
 }
 
 // [GET] /user/info
-module.exports.info = async (req , res) => {
+module.exports.info = async (req, res) => {
     res.render('client/pages/user/info', {
         title: 'Thông tin tài khoản'
+    });
+}
+
+// [GET] /user/edit
+module.exports.edit = async (req, res) => {
+    res.render('client/pages/user/edit', {
+        title: 'Chỉnh sửa thông tin tài khoản',
+    });
+}
+
+// [PATCH] /user/edit
+module.exports.editPatch = async (req, res) => {
+    const tokenUser = req.cookies.tokenUser;
+    await User.updateOne({
+        tokenUser: tokenUser
+    }, req.body);
+    req.flash('success', 'Cập nhật thông tin tài khoản thành công');
+    res.redirect('/user/info');
+}
+
+// [GET] /user/orders
+module.exports.orders = async (req, res) => {
+    const token = req.cookies.tokenUser;
+    const user = await User.findOne({
+        tokenUser: token,
+        deleted: false
+    });
+    console.log(user.id)
+    const orderList = await Order.find({
+        user_id: user.id
+    });
+    for (const order of orderList){
+        let totalPrice = 0;
+        let totalQuantity = 0;
+        for (const product of order.products) {
+            totalPrice += productsHelper.discountedPriceItem(product) * product.quantity;
+            totalQuantity += product.quantity;
+        }
+        const firstProduct = await Product.findOne({
+            _id: order.products[0].product_id,
+            deleted: false,
+            status: 'active'
+        })
+        order.totalPrice = totalPrice;
+        order.totalQuantity = totalQuantity;
+        order.firstProduct = firstProduct.thumbnail;
+    }
+    console.log(orderList);
+    res.render('client/pages/user/orders', {
+        title: 'Thông tin đơn hàng',
+        orders: orderList
     });
 }

@@ -1,6 +1,7 @@
 const Order = require('../../models/order.model');
 const Product = require("../../models/product.model");
 const Cart = require('../../models/cart.model');
+const User = require('../../models/user.model');
 const productsHelper = require('../../helpers/products');
 // [GET] /checkout
 module.exports.index = async (req, res) => {
@@ -33,7 +34,7 @@ module.exports.index = async (req, res) => {
 module.exports.orderPost = async (req, res) => {
     const cartId = req.cookies.cartId;
     const userInfo = req.body;
-
+    
     const cart = await Cart.findOne(
         {
             _id: cartId
@@ -59,13 +60,20 @@ module.exports.orderPost = async (req, res) => {
         products.push(objectProduct);
     }
     
+    // User_ID
+    const token = req.cookies.tokenUser;
+    const user = await User.findOne({
+        tokenUser: token,
+        deleted: false
+    });
+
     const objectOrder = {
+        user_id: user.id,
         cart_id: cartId,
         userInfo: userInfo,
         products: products
     };
-    
-    console.log(objectOrder);
+
     const order = new Order(objectOrder);
     await order.save();
 
