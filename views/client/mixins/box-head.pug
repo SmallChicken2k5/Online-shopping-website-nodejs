@@ -3,3 +3,9 @@ mixin box-head(title, description)
         h1.display-6.mb-2.text-primary.fw-bold #{title}
         if description
             p.text-muted.mb-0 !{description}
+
+mixin box-head-center(title, description)
+    .box-head-container.mb-4.p-3.bg-light.rounded.shadow-sm.text-center
+        h1.display-6.mb-2.text-primary.fw-bold #{title}
+        if description
+            p.text-muted.mb-0 !{description}
