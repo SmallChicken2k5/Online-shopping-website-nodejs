@@ -2,6 +2,7 @@ const User = require('../../models/user.model');
 const generate = require('../../helpers/generate');
 const ForgotPassword = require('../../models/forgot-password.model');
 const md5 = require('md5');
+const Cart = require('../../models/cart.model');
 const sendMailHelper = require('../../helpers/sendMail');
 // [GET] /user/register
 module.exports.register = (req , res) => {
@@ -60,6 +61,13 @@ module.exports.loginPost = async (req , res) => {
         return;
     }
     res.cookie('tokenUser', user.tokenUser);
+
+    await Cart.updateOne({
+        _id: req.cookies.cartId
+    }, {
+        user_id: user.id
+    });
+
     res.redirect('/');
 }
 
