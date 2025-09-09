@@ -214,6 +214,44 @@ block main
                 data-name="accounts_delete"
                 checked=(item.permissions.includes("accounts_delete") ? true : false)
               )
+        //- Đơn hàng
+        tr
+          td(colspan="4")
+            b Đơn hàng
+        tr
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id 
+                data-name="orders_view"
+                checked=(item.permissions.includes("orders_view") ? true : false)
+              )
+        tr
+          td Thêm mới
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="orders_approval"
+                checked=(item.permissions.includes("orders_approval") ? true : false)
+              )
+        // Cài đặt chung
+        tr
+          td(colspan="4")
+            b Cài đặt chung
+        tr
+          td Chỉnh sửa cài đặt
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="general_settings_update"
+                checked=(item.permissions.includes("general_settings_update") ? true : false)
+              )
     form(
         id='form-change-permissions'
         action=`${prefixAdmin}/roles/permissions?_method=PATCH`

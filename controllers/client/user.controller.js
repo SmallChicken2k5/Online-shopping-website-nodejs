@@ -225,7 +225,6 @@ module.exports.orders = async (req, res) => {
         tokenUser: token,
         deleted: false
     });
-    console.log(user.id)
     const orderList = await Order.find({
         user_id: user.id
     });
@@ -244,8 +243,15 @@ module.exports.orders = async (req, res) => {
         order.totalPrice = totalPrice;
         order.totalQuantity = totalQuantity;
         order.firstProduct = firstProduct.thumbnail;
+        const statusTextMap = {
+            pending: 'Đang xử lý',
+            approved: 'Đã duyệt',
+            rejected: 'Đã từ chối',
+            completed: 'Hoàn thành',
+            cancelled: 'Đã hủy'
+        };
+        order.status = statusTextMap[order.status] || '';
     }
-    console.log(orderList);
     res.render('client/pages/user/orders', {
         title: 'Thông tin đơn hàng',
         orders: orderList

@@ -1,0 +1,126 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/error404.pug
+include ../../mixins/moment.pug
+
+block main
+    +showAlertSuccess(5000)
+    +showAlertError(5000)
+
+    if (role.permissions.includes('orders_view'))
+        .container.py-4
+            h1.h2.mb-3.text-primary Chi tiết đơn hàng
+
+            if order
+                // Order summary card
+                .card.mb-4.border-0.shadow-lg
+                    .card-body.d-flex.flex-wrap.align-items-center.justify-content-between
+                        .d-flex.flex-column.flex-md-row.align-items-md-center.gap-3
+                            .order-code
+                                span.text-secondary.fw-light Mã đơn:
+                                span.fw-bold.ms-2.text-dark #{order.code}
+                            .order-status
+                                if order.status === 'pending'
+                                    span.badge.bg-warning.text-uppercase.px-3.py-2 Chờ duyệt
+                                else if order.status === 'approved'
+                                    span.badge.bg-success.text-uppercase.px-3.py-2 Đã duyệt
+                                else if order.status === 'rejected'
+                                    span.badge.bg-danger.text-uppercase.px-3.py-2 Đã từ chối
+                                else
+                                    span.badge.bg-secondary.text-uppercase.px-3.py-2 #{order.status}
+                        .order-date.mt-3.mt-md-0
+                            span.text-muted.fw-light Ngày đặt:
+                            span.ms-2
+                                +formatDateTime(order.createdAt)
+
+                .row.g-4
+                    // Customer info
+                    .col-12.col-lg-5
+                        .card.border-0.shadow-sm.h-100
+                            .card-header.bg-light.fw-semibold.text-primary Thông tin khách hàng
+                            .card-body
+                                ul.list-unstyled.mb-0
+                                    li.mb-2
+                                        i.fas.fa-user-circle.me-2.text-secondary
+                                        a.text-primary(href="#", data-bs-toggle="modal", data-bs-target="#userAccountModal") Tài khoản người đặt
+                                    li.mb-2
+                                        i.fas.fa-user.me-2.text-secondary
+                                        span.fw-bold #{order.userInfo.fullName}
+                                    li.mb-2
+                                        i.fas.fa-phone.me-2.text-secondary
+                                        span.text-muted #{order.userInfo.phone}
+                                    li
+                                        i.fas.fa-money-bill-wave.me-2.text-secondary
+                                        span.fw-bold.text-success Tổng tiền:
+                                        span.ms-2 #{order.totalPrice} $
+
+                        // Modal for user account info
+                        #userAccountModal.modal.fade(tabindex="-1", aria-labelledby="userAccountModalLabel", aria-hidden="true")
+                            .modal-dialog
+                                .modal-content
+                                    .modal-header
+                                        h5.modal-title#userAccountModalLabel Thông tin tài khoản người đặt
+                                        button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+                                    .modal-body
+                                        if user
+                                            ul.list-unstyled.text-center
+                                                li.mb-3
+                                                    if user.avatar
+                                                        img.img-thumbnail.rounded-circle.ms-2(src=user.avatar, alt="Ảnh đại diện", style="width:100px;height:100px;object-fit:cover;")
+                                                    else
+                                                        span.text-muted.ms-2 N/A
+                                                li.mb-2
+                                                    span.fw-bold Tên tài khoản:
+                                                    span.ms-2 #{user.fullName}
+                                                li.mb-2
+                                                    span.fw-bold Email:
+                                                    span.ms-2 #{user.email}
+                                                li.mb-2 
+                                                    span.fw-bold Số điện thoại:
+                                                    span.ms-2 #{user.phone}
+                                                li.mb-2 
+                                                    span.fw-bold Trạng thái:
+                                                    span.ms-2.text-capitalize #{user.status}
+                                                li.mb-2
+                                                    span.fw-bold Ngày tạo:
+                                                    span.ms-2
+                                                        +formatDateTime(user.createdAt)
+                                        else
+                                            p.text-muted.text-center Không có thông tin tài khoản.
+
+                    // Products table
+                    .col-12.col-lg-7
+                        .card.border-0.shadow-sm.h-100
+                            .card-header.bg-light.fw-semibold.text-primary.text-center Sản phẩm
+                            .card-body.p-0
+                                .table-responsive
+                                    table.table.table-bordered.table-hover.mb-0.align-middle
+                                        thead.table-light
+                                            tr
+                                                th.text-center Tên sản phẩm
+                                                th.text-center Ảnh
+                                                th.text-center Số lượng
+                                                th.text-end Giá
+                                                th.text-end Thành tiền
+                                        tbody
+                                            each item in order.products
+                                                tr
+                                                    td.fw-semibold.text-dark #{item.title}
+                                                    td.text-center
+                                                        if item.thumbnail
+                                                            img.img-thumbnail.rounded-circle(src=item.thumbnail, alt="Ảnh sản phẩm", style="width:48px;height:48px;object-fit:cover;")
+                                                        else
+                                                            span.text-muted N/A
+                                                    td.text-center #{item.quantity}
+                                                    td.text-end.text-success #{item.newPrice} $
+                                                    td.text-end.text-success.fw-bold #{item.newPrice * item.quantity} $
+
+                if order.note
+                    .row.mt-4
+                        .col-12
+                            .card.border-0.shadow-sm
+                                .card-header.bg-light.fw-semibold.text-primary Ghi chú
+                                .card-body
+                                    p.mb-0.text-muted #{order.note}
+            else
+                +error404('Không tìm thấy đơn hàng.')

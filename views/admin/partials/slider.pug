@@ -18,5 +18,9 @@
             if (role.permissions.includes('accounts_view'))
                 li
                     a(href=`${prefixAdmin}/accounts`) Tài khoản
-            li
-                a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
+            if (role.permissions.includes('orders_view'))
+                li
+                    a(href=`${prefixAdmin}/orders`) Đơn hàng
+            if (role.permissions.includes('general_settings_update'))
+                li
+                    a(href=`${prefixAdmin}/settings/general`) Cài đặt chung

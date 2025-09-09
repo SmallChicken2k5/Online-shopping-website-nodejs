@@ -94,6 +94,10 @@ module.exports.success = async (req, res) => {
     const order = await Order.findOne({
         _id: orderId
     })
+    if (!order) {
+        res.status(404).render('client/pages/errors/404', { title: 'Trang Không Tồn Tại' });
+        return;
+    }
     let totalPrice = 0;
     for (const product of order.products) {
         const productInfo = await Product.findOne({
