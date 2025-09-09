@@ -25,9 +25,6 @@ module.exports.addPost = async (req, res) => {
                 products: objectCart
             }
         })
-
-        req.flash('success', `Đã thêm ${quantity} sản phẩm ${product.title} vào giỏ hàng thành công`);
-        res.redirect(req.get('Referrer') || '/')
     } else {
         const newQuantity = existProduct.quantity + quantity;
         await Cart.updateOne({
@@ -38,9 +35,17 @@ module.exports.addPost = async (req, res) => {
                 "products.$.quantity": newQuantity
             }
         })
-        req.flash('success', `Đã thêm ${quantity} sản phẩm ${product.title} vào giỏ hàng thành công`);
-        res.redirect(req.get('Referrer') || '/')
     }
+
+    await Product.updateOne({
+        _id: productId
+    },{
+        $inc: {
+            stock: -quantity
+        }
+    })
+    req.flash('success', `Đã thêm ${quantity} sản phẩm ${product.title} vào giỏ hàng thành công`);
+    res.redirect(req.get('Referrer') || '/')
 
 }
 
@@ -75,7 +80,17 @@ module.exports.index = async (req, res) => {
 module.exports.delete = async (req, res) => {
     const cartId = req.cookies.cartId;
     const productId = req.params.productId;
-    
+    const cart = await Cart.findOne({
+        _id : cartId
+    });
+    const product = cart.products.find(item => item.product_id === productId);
+    await Product.updateOne({
+        _id: productId,
+    },{
+        $inc: {
+            stock: product.quantity
+        }
+    })
     await Cart.updateOne({
         _id: cartId
     },{
@@ -85,6 +100,7 @@ module.exports.delete = async (req, res) => {
             }
         }
     })
+
     req.flash('success', 'Xoá sản phẩm khỏi giỏ hàng thành công');
     res.redirect(req.get('Referrer') || '/')
 }
@@ -104,6 +120,17 @@ module.exports.update = async (req, res) => {
         req.flash('error', 'Số lượng sản phẩm trong kho không đủ');
         return res.redirect(req.get('Referrer') || '/');
     }
+    const cart = await Cart.findOne({
+        _id: cartId
+    });
+    const productInCart = cart.products.find(item => item.product_id === productId);
+    await Product.updateOne({
+        _id: productId
+    },{
+        $inc: {
+            stock: productInCart.quantity - quantity
+        }
+    })
     await Cart.updateOne({
         _id: cartId,
         "products.product_id": productId

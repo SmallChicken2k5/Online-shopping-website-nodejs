@@ -49,6 +49,9 @@ block main
                                     li.mb-2
                                         i.fas.fa-phone.me-2.text-secondary
                                         span.text-muted #{order.userInfo.phone}
+                                    li.mb-2
+                                        i.fas.fa-map-marker-alt.me-2.text-secondary
+                                        span.text-muted #{order.userInfo.address}
                                     li
                                         i.fas.fa-money-bill-wave.me-2.text-secondary
                                         span.fw-bold.text-success Tổng tiền:
@@ -105,10 +108,11 @@ block main
                                         tbody
                                             each item in order.products
                                                 tr
-                                                    td.fw-semibold.text-dark #{item.title}
+                                                    td.fw-semibold.text-dark.text-center
+                                                        a.text-decoration-none.text-dark(href=`/admin/products/detail/${item.product_id}`) #{item.title}
                                                     td.text-center
                                                         if item.thumbnail
-                                                            img.img-thumbnail.rounded-circle(src=item.thumbnail, alt="Ảnh sản phẩm", style="width:48px;height:48px;object-fit:cover;")
+                                                            img.img-thumbnail(src=item.thumbnail, alt="Ảnh sản phẩm", style="width:48px;height:48px;object-fit:cover;")
                                                         else
                                                             span.text-muted N/A
                                                     td.text-center #{item.quantity}

@@ -1,59 +1,148 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 include ../../mixins/alert.pug
-//- // sử dụng full boostrap
+
+//- Uses Bootstrap 5 and Bootstrap Icons (https://icons.getbootstrap.com/)
+
 block main
     +showAlertSuccess(5000)
     +showAlertError(5000)
+
     .product-detail
-        .container.my-5
-            .row.g-5
-                .col-md-6
-                    .ratio.ratio-4x3.bg-light.rounded.overflow-hidden(style="max-width: 500px; margin: 0 auto;")
-                        img.img-fluid.w-100.h-100.object-fit-contain(
-                            src=product.thumbnail, 
-                            alt=product.title
-                        )
-                .col-md-6
-                    h1.display-5.mb-3 #{product.title}
-
+        .container.py-4.py-md-5
+            //- Breadcrumb
+            nav(aria-label="breadcrumb").mb-3.mb-md-4
+                ol.breadcrumb.mb-0
+                    li.breadcrumb-item
+                        a.text-decoration-none(href="/")
+                            i.bi.bi-house-door.me-1
+                            | Trang chủ
+                    li.breadcrumb-item
+                        a.text-decoration-none(href="/products") Sản phẩm
                     if product.category
-                        .mb-2
-                            span.text-muted.me-1 Danh mục: 
-                            a.text-decoration-none.text-primary(
-                                href=`/products/${product.category.slug}`
-                            ) #{product.category.title}
+                        li.breadcrumb-item
+                            a.text-decoration-none(href=`/products/${product.category.slug}`) #{product.category.title}
+                    li.breadcrumb-item.active(aria-current="page") #{product.title}
 
-                    if product.priceNew
-                        .fs-4.fw-bold.text-success.mb-2 Giá mới: #{product.priceNew}$
+            .row.g-4.g-lg-5.align-items-start
+                //- Left: Image / Category
+                .col-12.col-lg-6
+                    .card.border-0.shadow-sm
+                        .position-relative.rounded-top.overflow-hidden
+                            .ratio.ratio-4x3.bg-light
+                                img.img-fluid.w-100.h-100.object-fit-contain(
+                                    src=product.thumbnail,
+                                    alt=product.title,
+                                    loading="lazy"
+                                )
+                            if product.discountPercentage
+                                span.badge.bg-danger.position-absolute.top-0.start-0.m-2
+                                    i.bi.bi-lightning-charge-fill.me-1
+                                    | Giảm #{product.discountPercentage}%
+                        if product.category
+                            .card-footer.bg-transparent.small
+                                i.bi.bi-tag.me-1.text-muted
+                                span.text-muted.me-1 Danh mục:
+                                a.text-decoration-none.text-primary(
+                                    href=`/products/${product.category.slug}`
+                                ) #{product.category.title}
 
-                    if product.price
-                        .text-decoration-line-through.text-muted.mb-2 Giá cũ: #{product.price}$
+                //- Right: Details / Actions
+                .col-12.col-lg-6
+                    .card.border-0.shadow-sm.sticky-top(style="top: 2rem")
+                        .card-body
+                            //- Title + quick actions
+                            .d-flex.flex-wrap.align-items-start.justify-content-between.gap-2
+                                h1.h2.h1-lg.fw-semibold.mb-0 #{product.title}
+                                .d-flex.gap-2
+                                    button.btn.btn-outline-secondary.btn-sm(type="button" title="Yêu thích")
+                                        i.bi.bi-heart
+                                    button.btn.btn-outline-secondary.btn-sm(type="button" title="Chia sẻ")
+                                        i.bi.bi-share
 
-                    if product.discountPercentage
-                        .badge.bg-danger.mb-2 Giảm tới #{product.discountPercentage}%
+                            //- Pricing
+                            .mt-3
+                                if product.priceNew
+                                    .d-flex.align-items-center.flex-wrap.gap-2
+                                        span.fs-2.fw-bold.text-success #{product.priceNew}$
+                                        if product.price
+                                            small.text-muted.text-decoration-line-through #{product.price}$
+                                        if product.discountPercentage
+                                            span.badge.bg-danger.text-light
+                                                i.bi.bi-percent.me-1
+                                                | -#{product.discountPercentage}%
+                                else if product.price
+                                    .fs-4.fw-semibold.text-body #{product.price}$
 
-                    if product.stock
-                        .mb-3
-                            span.fw-semibold.text-dark Còn lại 
-                            span.badge.bg-warning.text-dark.ms-1 #{product.stock}
-                            | sản phẩm
+                            //- Stock
+                            .mt-2
+                                if product.stock > 0
+                                    .d-inline-flex.align-items-center.gap-2
+                                        span.badge.bg-success
+                                            i.bi.bi-check-circle.me-1
+                                            | Còn hàng
+                                        small.text-muted
+                                            | Còn lại 
+                                            span.fw-semibold.text-dark #{product.stock}
+                                            |  sản phẩm
+                                else
+                                    span.badge.bg-danger
+                                        i.bi.bi-x-octagon.me-1
+                                        | Hết hàng
 
-                    form(action=`/cart/add/${product.id}` method="POST" class="mt-3")
-                        .input-group.mb-3
-                            input.form-control(
-                                type="number"
-                                name="quantity"
-                                value="1"
-                                min="1"
-                                max=product.stock
-                            )
-                            button.btn.btn-success(type="submit") Thêm vào giỏ hàng
+                            //- Add to cart
+                            form(action=`/cart/add/${product.id}` method="POST" class="mt-3")
+                                .row.g-2
+                                    .col-12.col-sm-6
+                                        .input-group
+                                            span.input-group-text
+                                                i.bi.bi-list-ol.me-1
+                                                | Số lượng
+                                            input.form-control(
+                                                type="number"
+                                                name="quantity"
+                                                value=(product.stock > 0 ? '1' : '0')
+                                                min=(product.stock > 0 ? '1' : '0')
+                                                max=product.stock
+                                                step="1"
+                                                required
+                                                aria-label="Số lượng"
+                                                disabled=(product.stock <= 0)
+                                            )
+                                    .col-12.col-sm-6
+                                        button.btn.btn-primary.btn-lg.w-100(
+                                            type="submit"
+                                            disabled=(product.stock <= 0)
+                                        )
+                                            i.bi.bi-cart-plus.me-2
+                                            | Thêm vào giỏ hàng
+                                if product.stock <= 0
+                                    .form-text.text-danger.mt-1
+                                        i.bi.bi-exclamation-octagon.me-1
+                                        | Sản phẩm hiện đã hết hàng.
 
-        hr
+                            //- Selling points
+                            .mt-4
+                                ul.list-unstyled.mb-0.small.text-body
+                                    li.d-flex.align-items-center.mb-2
+                                        i.bi.bi-truck.me-2.text-primary
+                                        | Giao hàng nhanh toàn quốc
+                                    li.d-flex.align-items-center.mb-2
+                                        i.bi.bi-shield-check.me-2.text-primary
+                                        | Hàng chính hãng, bảo hành theo chính sách
+                                    li.d-flex.align-items-center
+                                        i.bi.bi-arrow-repeat.me-2.text-primary
+                                        | Đổi trả dễ dàng trong 7 ngày
 
-        .container.my-5
+        hr.my-5
+
+        .container.pb-5
             .row
                 .col-12
                     +box-head("Mô tả sản phẩm")
-                    .inner-desc !{product.description}
+                    .card.border-0.shadow-sm
+                        .card-body
+                            .d-flex.align-items-center.mb-3
+                                i.bi.bi-info-circle.me-2.text-primary
+                                h5.mb-0 Chi tiết
+                            .inner-desc !{product.description}

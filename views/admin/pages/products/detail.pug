@@ -1,41 +1,77 @@
 extends ../../layouts/default.pug
 
 block main
-  if (product.title)
-    h1(class="mb-4") #{product.title}
-  if (product.product_category_id)
-    div(class="mb-4") Danh mục: <b>#{productCategory.title}</b>
-  if (product.price)
-    div(class="mb-4") Giá: <b>#{product.price}$</b>
+  .card.shadow-sm
+    .card-body
+      if (product.title)
+        .d-flex.justify-content-between.align-items-center.mb-3
+          h1.h4.mb-0
+            i.bi.bi-bag.me-2
+            | #{product.title}
+          a(
+            href=`${prefixAdmin}/products/edit/${product._id}`
+            class="btn btn-warning btn-sm"
+          )
+            i.bi.bi-pencil-square.me-1
+            | Sửa sản phẩm
 
-  if (product.discountPercentage)
-    div(class="mb-4") Giảm giá: <b>#{product.discountPercentage}%</b>
+      .row.g-4
+        .col-md-5
+          if (product.thumbnail)
+            .ratio.ratio-1x1
+                img(
+                  src=product.thumbnail
+                  alt=product.title
+                  class="img-fluid rounded"
+                  style="object-fit: contain;"
+                )
+          else
+            .d-flex.align-items-center.justify-content-center.bg-light.border.rounded.py-5
+              i.bi.bi-image.fs-1.text-muted
+        .col-md-7
+          if (product.product_category_id)
+            p.mb-2
+              i.bi.bi-folder.me-2
+              | Danh mục:
+              span.ms-1.badge.bg-secondary #{productCategory.title}
+          if (product.price)
+            p.mb-2
+              i.bi.bi-currency-dollar.me-2
+              | Giá:
+              span.ms-1.fw-semibold #{product.price}$
+          if (product.discountPercentage)
+            p.mb-2
+              i.bi.bi-percent.me-2
+              | Giảm giá:
+              span.ms-1.badge.bg-info.text-dark #{product.discountPercentage}%
+          if (product.stock)
+            p.mb-2
+              i.bi.bi-box-seam.me-2
+              | Còn lại:
+              span.ms-1.fw-semibold #{product.stock}
+          if (product.status)
+            p.mb-2
+              i.bi.bi-toggle2-on.me-2
+              | Trạng thái:
+              if (product.status === "active")
+                span.badge.bg-success
+                  i.bi.bi-check-circle.me-1
+                  | Hoạt động
+              else
+                span.badge.bg-danger
+                  i.bi.bi-x-circle.me-1
+                  | Dừng hoạt động
+          if (product.position)
+            p.mb-2
+              i.bi.bi-list-ol.me-2
+              | Vị trí:
+              span.ms-1.fw-semibold #{product.position}
 
-  if (product.stock)
-    div(class="mb-4") Còn lại: <b>#{product.stock}</b>
-
-  if (product.thumbnail)
-    div(class="mb-4")
-      img(
-        src=product.thumbnail
-        style="width: 100px"
-      )
-
-  if (product.status)
-    div(class="mb-4")
-      span Trạng thái:
-      if (product.status === "active")
-        span(style="color: #fff; background-color: #28a745; padding: 4px 8px; border-radius: 4px;") Hoạt động
-      else
-        span(style="color: #fff; background-color: #dc3545; padding: 4px 8px; border-radius: 4px;") Dừng hoạt động
-
-  if (product.position)
-    div(class="mb-4") Vị trí: <b>#{product.position}</b>
-
-  if (product.description)
-    div(class="mb-4") !{product.description}
-
-    a(
-      href=`${prefixAdmin}/products/edit/${product._id}`
-      class="btn btn-warning"
-    ) Sửa sản phẩm
+      if (product.description)
+        .mt-4
+          h5.mb-2
+            i.bi.bi-file-text.me-2
+            | Mô tả
+          .card.border-0.bg-light
+            .card-body
+              .content !{product.description}

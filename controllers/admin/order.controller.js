@@ -76,6 +76,18 @@ module.exports.approval = async(req, res) => {
 // [PATCH] /admin/orders/reject/:id
 module.exports.rejection = async(req, res) => {
     const id = req.params.id;
+    const order = await Order.findOne({
+        _id: id
+    })
+    for (const prod of order.products) {
+        await Product.updateOne({
+            _id: prod.product_id
+        },{
+            $inc: {
+                stock: prod.quantity
+            }
+        });
+    }
     await Order.updateOne({
         _id: id
     },{

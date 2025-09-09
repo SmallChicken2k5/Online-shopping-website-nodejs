@@ -1,11 +1,55 @@
 mixin box-head(title, description)
-    .box-head-container.mb-4.p-3.bg-light.rounded.shadow-sm
-        h1.display-6.mb-2.text-primary.fw-bold #{title}
-        if description
-            p.text-muted.mb-0 !{description}
+    - var iconClass = attributes.icon || 'bi-bag'
+    - var badgeText = attributes.badge || null
+    - var badgeVariant = attributes.badgeVariant || 'danger' // primary | secondary | success | danger | warning | info | dark | light
+
+    .box-head-container.mb-4.p-3.p-md-4.bg-white.border.rounded-3.shadow-sm
+        .d-flex.align-items-center.justify-content-between.flex-wrap.gap-3
+            .d-flex.align-items-center.gap-3
+                .d-inline-flex.align-items-center.justify-content-center.bg-primary.bg-opacity-10.text-primary.rounded-circle(style='width:48px;height:48px')
+                    i.bi.fs-4(class=iconClass)
+                .title
+                    h1.mb-1.text-body-emphasis.fs-4.fs-md-3
+                        | #{title}
+                        if badgeText
+                            span.badge.ms-2(class='bg-' + badgeVariant) #{badgeText}
+                    if description
+                        p.mb-0.text-secondary.small !{description}
+            if block
+                .d-flex.align-items-center.gap-2
+                    block
 
 mixin box-head-center(title, description)
-    .box-head-container.mb-4.p-3.bg-light.rounded.shadow-sm.text-center
-        h1.display-6.mb-2.text-primary.fw-bold #{title}
-        if description
-            p.text-muted.mb-0 !{description}
+    - var iconClass = attributes.icon || 'bi-bag-heart'
+    - var badgeText = attributes.badge || null
+    - var badgeVariant = attributes.badgeVariant || 'success'
+
+    .box-head-container.mb-4.p-4.bg-white.border.rounded-3.shadow-sm.text-center
+        .d-flex.flex-column.align-items-center.gap-2
+            .d-inline-flex.align-items-center.justify-content-center.bg-primary.bg-opacity-10.text-primary.rounded-circle(style='width:56px;height:56px')
+                i.bi.fs-3(class=iconClass)
+            h1.mb-1.text-body-emphasis.fs-4.fs-md-3
+                | #{title}
+                if badgeText
+                    span.badge.ms-2(class='bg-' + badgeVariant) #{badgeText}
+            if description
+                p.mb-0.text-secondary.small !{description}
+        if block
+            .mt-3.d-flex.justify-content-center.flex-wrap.gap-2
+                block
+mixin box-head-center-noicon(title)
+    - var iconClass = attributes.icon || 'bi-bag-heart'
+    - var badgeText = attributes.badge || null
+    - var badgeVariant = attributes.badgeVariant || 'success'
+
+    .box-head-container.mb-4.p-4.bg-white.border.rounded-3.shadow-sm.text-center
+        .d-flex.flex-column.align-items-center.gap-2
+            h1.mb-1.text-body-emphasis.fs-4.fs-md-3
+                | #{title}
+                if badgeText
+                    span.badge.ms-2(class='bg-' + badgeVariant) #{badgeText}
+            if description
+                p.mb-0.text-secondary.small !{description}
+        if block
+            .mt-3.d-flex.justify-content-center.flex-wrap.gap-2
+                block
