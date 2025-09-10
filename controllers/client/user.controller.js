@@ -70,6 +70,20 @@ module.exports.loginPost = async (req, res) => {
     const cartOfUser = await Cart.findOne({ user_id: user.id, _id: { $ne: cartCurrent?._id } });
 
     if (cartOfUser) {
+        const cart = await Cart.findOne({
+            _id: req.cookies.cartId
+        })
+        if (cart) {
+            for (const product of cart.products) {
+                await Product.updateOne({
+                    _id: product.product_id,
+                    deleted: false,
+                    status: 'active'
+                },{
+                    $inc: { stock: product.quantity }
+                });
+            }
+        }
         res.cookie('cartId', cartOfUser.id);
         await Cart.deleteOne({ _id: cartCurrent._id });
     } else {

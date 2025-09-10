@@ -9,6 +9,7 @@ const accountRoute = require('./account.route')
 const authRoute = require('./auth.route')
 const orderRoute = require('./order.route')
 const settingRoute = require('./setting.route')
+const cartRoute = require('./cart.route')
 const authMiddleware = require('../../middlewares/admin/auth.middleware')
 const myAccountRoute = require('./my-account.route')
 const settingMiddleware = require('../../middlewares/admin/setting.middleware')
@@ -56,4 +57,9 @@ module.exports = (app) => {
         authMiddleware.requireAuth,
         orderRoute
     )
+    app.use(
+        PATH_ADMIN + '/carts',
+        authMiddleware.requireAuth,
+        cartRoute
+    );
 }

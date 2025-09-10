@@ -1,77 +1,181 @@
 extends ../../layouts/default.pug
 
 block main
-  .card.shadow-sm
-    .card-body
-      if (product.title)
-        .d-flex.justify-content-between.align-items-center.mb-3
-          h1.h4.mb-0
-            i.bi.bi-bag.me-2
-            | #{product.title}
-          a(
-            href=`${prefixAdmin}/products/edit/${product._id}`
-            class="btn btn-warning btn-sm"
-          )
-            i.bi.bi-pencil-square.me-1
-            | Sửa sản phẩm
+  - const isActive = product.status === 'active';
 
-      .row.g-4
-        .col-md-5
+  // Breadcrumb + Actions
+  .d-flex.flex-wrap.justify-content-between.align-items-center.mb-4.gap-2
+    nav(aria-label="breadcrumb")
+      ol.breadcrumb.mb-0
+        li.breadcrumb-item
+          a(href=`${prefixAdmin}/dashboard`) 
+            i.bi.bi-speedometer2.me-1
+            | Dashboard
+        li.breadcrumb-item
+          a(href=`${prefixAdmin}/products`) 
+            i.bi.bi-bag.me-1
+            | Sản phẩm
+        li.breadcrumb-item.active(aria-current="page") Chi tiết
+    .btn-group
+      a.btn.btn-outline-secondary.btn-sm(href=`${prefixAdmin}/products`)
+        i.bi.bi-arrow-left.me-1
+        | Quay lại
+      a.btn.btn-warning.btn-sm(href=`${prefixAdmin}/products/edit/${product._id}`)
+        i.bi.bi-pencil-square.me-1
+        | Sửa
+      if (product._id)
+        form(directive="delete" action=`${prefixAdmin}/products/delete/${product._id}` method="post" onsubmit="return confirm('Xóa sản phẩm?');" class="d-inline")
+          button.btn.btn-outline-danger.btn-sm(type="submit")
+            i.bi.bi-trash.me-1
+            | Xóa
+
+  // Title + Status
+  .card.border-0.shadow-sm.mb-4
+    .card-body.py-3
+      .d-flex.flex-wrap.align-items-center.gap-3
+        h1.h4.mb-0.d-flex.align-items-center
+          i.bi.bi-bag.me-2.text-primary
+          | #{product.title || 'Sản phẩm'}
+        if (product.status)
+          span.badge.px-3.py-2.fs-7(class=isActive ? 'bg-success-subtle text-success border border-success-subtle' : 'bg-danger-subtle text-danger border border-danger-subtle')
+            if (isActive)
+              i.bi.bi-check-circle.me-1
+              | Hoạt động
+            else
+              i.bi.bi-x-circle.me-1
+              | Dừng
+
+  // Main Layout
+  .row.g-4
+    // Left: Media
+    .col-lg-4
+      .card.h-100.shadow-sm
+        .card-header.bg-light.py-2.d-flex.align-items-center.justify-content-between
+          span.fw-semibold
+            i.bi.bi-images.me-2
+            | Hình ảnh
+        .card-body
           if (product.thumbnail)
-            .ratio.ratio-1x1
-                img(
-                  src=product.thumbnail
-                  alt=product.title
-                  class="img-fluid rounded"
-                  style="object-fit: contain;"
-                )
+            .ratio.ratio-1x1.mb-3.border.rounded.d-flex.align-items-center.justify-content-center.bg-white(
+              style="min-height:300px;display:flex;align-items:center;justify-content:center;"
+            )
+              img(
+                src=product.thumbnail
+                alt=product.title
+                class="img-fluid"
+                style="max-width:90%;max-height:90%;object-fit:contain;"
+              )
           else
-            .d-flex.align-items-center.justify-content-center.bg-light.border.rounded.py-5
-              i.bi.bi-image.fs-1.text-muted
-        .col-md-7
-          if (product.product_category_id)
-            p.mb-2
-              i.bi.bi-folder.me-2
-              | Danh mục:
-              span.ms-1.badge.bg-secondary #{productCategory.title}
-          if (product.price)
-            p.mb-2
-              i.bi.bi-currency-dollar.me-2
-              | Giá:
-              span.ms-1.fw-semibold #{product.price}$
-          if (product.discountPercentage)
-            p.mb-2
-              i.bi.bi-percent.me-2
-              | Giảm giá:
-              span.ms-1.badge.bg-info.text-dark #{product.discountPercentage}%
-          if (product.stock)
-            p.mb-2
-              i.bi.bi-box-seam.me-2
-              | Còn lại:
-              span.ms-1.fw-semibold #{product.stock}
-          if (product.status)
-            p.mb-2
-              i.bi.bi-toggle2-on.me-2
-              | Trạng thái:
-              if (product.status === "active")
-                span.badge.bg-success
-                  i.bi.bi-check-circle.me-1
-                  | Hoạt động
-              else
-                span.badge.bg-danger
-                  i.bi.bi-x-circle.me-1
-                  | Dừng hoạt động
-          if (product.position)
-            p.mb-2
-              i.bi.bi-list-ol.me-2
-              | Vị trí:
-              span.ms-1.fw-semibold #{product.position}
+            .d-flex.flex-column.align-items-center.justify-content-center.text-muted.border.rounded.py-5.bg-light
+              i.bi.bi-image.display-6.mb-2
+              small Chưa có hình
+          // Placeholder for gallery thumbnails (nếu sau này có)
+          .row.g-2.mt-2
+            // each imgUrl in (product.gallery || [])
+            //   .col-3
+            //     .ratio.ratio-1x1.border.rounded.overflow-hidden
+            //       img(src=imgUrl alt=product.title class="w-100 h-100" style="object-fit:cover;")
+          small.text-muted
+            i.bi.bi-info-circle.me-1
+            | Kích thước hiển thị tốt nhất: vuông (1:1)
+
+    // Right: Info
+    .col-lg-8
+      .card.shadow-sm.mb-4
+        .card-header.bg-light.py-2
+          .d-flex.align-items-center
+            i.bi.bi-info-circle.me-2
+            span.fw-semibold Thông tin cơ bản
+        .card-body
+          .row.g-3
+            if (product.product_category_id)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-folder.me-1
+                  | Danh mục
+                div
+                  span.badge.bg-secondary
+                    i.bi.bi-tag.me-1
+                    | #{productCategory.title}
+            if (product.price)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-currency-dollar.me-1
+                  | Giá
+                div.fw-semibold.text-primary #{product.price}$
+            if (product.discountPercentage)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-percent.me-1
+                  | Giảm giá
+                div
+                  span.badge.bg-info.text-dark
+                    i.bi.bi-arrow-down-short.me-1
+                    | #{product.discountPercentage}%
+            if (product.stock)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-box-seam.me-1
+                  | Tồn kho
+                div.fw-semibold #{product.stock}
+            if (product.position)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-list-ol.me-1
+                  | Vị trí sắp xếp
+                div.fw-semibold #{product.position}
+            if (product.createdAt)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-calendar-plus.me-1
+                  | Ngày tạo
+                div #{new Date(product.createdAt).toLocaleString('vi-VN')}
+            if (product.updatedAt)
+              .col-sm-6
+                label.form-label.fw-semibold.mb-1
+                  i.bi.bi-clock-history.me-1
+                  | Cập nhật
+                div #{new Date(product.updatedAt).toLocaleString('vi-VN')}
 
       if (product.description)
-        .mt-4
-          h5.mb-2
+        .card.shadow-sm
+          .card-header.bg-light.py-2.d-flex.align-items-center
             i.bi.bi-file-text.me-2
-            | Mô tả
-          .card.border-0.bg-light
+            span.fw-semibold Mô tả
+            button.btn.btn-sm.btn-outline-secondary.ms-auto(type="button" data-bs-toggle="collapse" data-bs-target="#descCollapse")
+              i.bi.bi-arrows-collapse
+          #descCollapse.collapse.show
             .card-body
               .content !{product.description}
+
+  // Stats (ví dụ nhanh) - hiển thị nếu có dữ liệu
+  if (product.stock || product.price || product.discountPercentage)
+    .row.g-3.mt-1
+      .col-md-4
+        .card.border-0.shadow-sm.bg-primary-subtle
+          .card-body.py-3
+            .d-flex.align-items-center
+              i.bi.bi-currency-dollar.display-6.me-3.text-primary
+              div
+                small.text-uppercase.fw-semibold.text-primary Giá
+                div.fw-bold #{product.price || 0}$
+      .col-md-4
+        .card.border-0.shadow-sm.bg-warning-subtle
+          .card-body.py-3
+            .d-flex.align-items-center
+              i.bi.bi-percent.display-6.me-3.text-warning
+              div
+                small.text-uppercase.fw-semibold.text-warning Giảm
+                div.fw-bold #{product.discountPercentage || 0}%
+      .col-md-4
+        .card.border-0.shadow-sm.bg-success-subtle
+          .card-body.py-3
+            .d-flex.align-items-center
+              i.bi.bi-box-seam.display-6.me-3.text-success
+              div
+                small.text-uppercase.fw-semibold.text-success Kho
+                div.fw-bold #{product.stock || 0}
+
+  // Optional JS (nếu cần lazy enhancements)
+  // script.
+  //   // Thêm JS tùy ý

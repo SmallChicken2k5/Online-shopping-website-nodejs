@@ -238,6 +238,16 @@ block main
                 data-name="orders_approval"
                 checked=(item.permissions.includes("orders_approval") ? true : false)
               )
+        tr
+          td Quản lí giỏ hàng
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="carts_management"
+                checked=(item.permissions.includes("carts_management") ? true : false)
+              )
         // Cài đặt chung
         tr
           td(colspan="4")

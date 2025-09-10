@@ -96,3 +96,4 @@ module.exports.rejection = async(req, res) => {
     req.flash('success', 'Từ chối đơn hàng thành công!');
     res.redirect('/admin/orders');
 }
+

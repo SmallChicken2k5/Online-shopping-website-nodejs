@@ -199,7 +199,7 @@ block main
 
         //- Right: account + actions
         .col-12.col-lg-4
-            .card.h-100.shadow-sm
+            .card.h-60.shadow-sm
                 .card-header.bg-white.fw-semibold Thông tin tài khoản
                 .card-body
                     .d-flex.align-items-start
@@ -234,12 +234,18 @@ block main
                 .card-header.bg-white.fw-semibold Tác vụ nhanh
                 .card-body
                     .d-grid.gap-2
-                        a.btn.btn-primary.btn-sm(href="#")
-                            i.bi.bi-plus-lg.me-1
-                            | Thêm sản phẩm
-                        a.btn.btn-outline-primary.btn-sm(href="#")
-                            i.bi.bi-collection.me-1
-                            | Thêm danh mục
-                        a.btn.btn-outline-secondary.btn-sm(href="#")
-                            i.bi.bi-people.me-1
-                            | Quản lý người dùng
+                        //- a.btn.btn-primary.btn-sm(href=`${prefixAdmin}/products/create`)
+                        //-     i.bi.bi-plus-lg.me-1
+                        //-     | Thêm sản phẩm
+                        //- a.btn.btn-outline-primary.btn-sm(href=`${prefixAdmin}/products-category/create`)
+                        //-     i.bi.bi-collection.me-1
+                        //-     | Thêm danh mục
+                        if (role.permissions.includes('carts_management'))
+                            form(
+                                method="POST"
+                                action=`${prefixAdmin}/carts/cleanup?_method=DELETE`
+                                onsubmit="return confirm('Xác nhận xoá giỏ hàng vô chủ?');"
+                            )
+                                button(type="submit" class="btn btn-outline-danger btn-sm w-100")
+                                    i.bi.bi-trash.me-1
+                                    | Xoá giỏ hàng vô chủ
