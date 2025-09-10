@@ -1,8 +1,7 @@
-# Backend Quản Lý Sản Phẩm
+# Online shopping website
 
-Dịch vụ backend quản lý sản phẩm (CRUD, phân quyền, giỏ hàng, đơn hàng, thống kê). Dự án dùng Node.js. Các file và thư mục hiện có phản ánh kiến trúc module tách rõ: cấu hình, models, controllers, helpers, middlewares, routes.
+Trang web bán hàng online (CRUD, phân quyền, giỏ hàng, đơn hàng, thống kê). Dự án dùng Node.js. Các file và thư mục hiện có phản ánh kiến trúc module tách rõ: cấu hình, models, controllers, helpers, middlewares, routes.
 
-> Ghi chú: README này được tạo dựa trên cấu trúc thư mục hiện có. Bổ sung chi tiết (DB thực tế, ví dụ API, logic nghiệp vụ) nếu cần.
 
 ## Mục Lục
 - [Tính Năng Chính](#tính-năng-chính)
