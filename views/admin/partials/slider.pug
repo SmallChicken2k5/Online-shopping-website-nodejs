@@ -1,26 +1,56 @@
-.sider
-    .inner-menu
-        ul 
-            li
-                a(href=`${prefixAdmin}/dashboard`) Tổng quan
+aside.sider.bg-dark.text-white.border-end.min-vh-100
+    .inner-menu.p-3
+        .d-flex.align-items-center.mb-3
+            i.bi.bi-grid-3x3-gap-fill.me-2.fs-5
+            span.fw-semibold.text-uppercase.text-secondary Quản trị
+
+        ul.nav.nav-pills.flex-column.gap-1
+            li.nav-item
+                a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/dashboard`)
+                    i.bi.bi-speedometer2
+                    span Tổng quan
+
             if (role.permissions.includes('products_view'))
-                li
-                    a(href=`${prefixAdmin}/products`) Sản phẩm
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/products`)
+                        i.bi.bi-box-seam
+                        span Sản phẩm
+
             if (role.permissions.includes('products-category_view'))
-                li
-                    a(href=`${prefixAdmin}/products-category`) Danh mục sản phẩm
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/products-category`)
+                        i.bi.bi-tags
+                        span Danh mục sản phẩm
+
             if (role.permissions.includes('roles_view'))
-                li
-                    a(href=`${prefixAdmin}/roles`) Nhóm quyền
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/roles`)
+                        i.bi.bi-shield-lock
+                        span Nhóm quyền
+
             if (role.permissions.includes('roles_permissions'))
-                li
-                    a(href=`${prefixAdmin}/roles/permissions`) Phân quyền
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/roles/permissions`)
+                        i.bi.bi-key
+                        span Phân quyền
+
             if (role.permissions.includes('accounts_view'))
-                li
-                    a(href=`${prefixAdmin}/accounts`) Tài khoản
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/accounts`)
+                        i.bi.bi-people
+                        span Tài khoản
+
             if (role.permissions.includes('orders_view'))
-                li
-                    a(href=`${prefixAdmin}/orders`) Đơn hàng
-            if (role.permissions.includes('general_settings_update'))
-                li
-                    a(href=`${prefixAdmin}/settings/general`) Cài đặt chung
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/orders`)
+                        i.bi.bi-bag-check
+                        span Đơn hàng
+
+        if (role.permissions.includes('general_settings_update'))
+            hr.my-3
+            .text-uppercase.text-secondary.fw-semibold.small.mb-2 Cấu hình
+            ul.nav.nav-pills.flex-column.gap-1
+                li.nav-item
+                    a.nav-link.text-white.d-flex.align-items-center.gap-2(href=`${prefixAdmin}/settings/general`)
+                        i.bi.bi-gear
+                        span Cài đặt chung

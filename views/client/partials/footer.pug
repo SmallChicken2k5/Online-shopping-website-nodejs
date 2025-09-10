@@ -1,2 +1,61 @@
-footer.footer 
-    div !{settingGeneral.copyright}
+//- Requires Bootstrap 5 and (optional) Bootstrap Icons
+footer.footer.bg-dark.text-light.mt-5
+    .container.py-4
+        .row.gy-4
+            .col-md-4
+                if typeof settingGeneral !== 'undefined' && settingGeneral.siteName
+                    h5.mb-3 #{settingGeneral.siteName}
+                else
+                    h5.mb-3 Tên thương hiệu
+                p.small.mb-3 Mô tả ngắn về website/ứng dụng của bạn.
+                - var social = (typeof settingGeneral !== 'undefined' && settingGeneral.social) ? settingGeneral.social : {};
+                .d-flex.gap-3
+                    a.text-light.text-decoration-none(href=(social.facebook || '#'), target="_blank", aria-label="Facebook")
+                        i.bi.bi-facebook.fs-4
+                    a.text-light.text-decoration-none(href=(social.youtube || '#'), target="_blank", aria-label="YouTube")
+                        i.bi.bi-youtube.fs-4
+                    a.text-light.text-decoration-none(href=(social.tiktok || '#'), target="_blank", aria-label="TikTok")
+                        i.bi.bi-tiktok.fs-4
+                    a.text-light.text-decoration-none(href=(social.linkedin || '#'), target="_blank", aria-label="LinkedIn")
+                        i.bi.bi-linkedin.fs-4
+
+            .col-md-4
+                h6.text-uppercase.mb-3 Liên kết
+                ul.list-unstyled
+                    li.mb-2
+                        a.text-light.text-decoration-none(href="/") Trang chủ
+                    li.mb-2
+                        a.text-light.text-decoration-none(href="/products") Sản phẩm
+                    li.mb-2
+                        a.text-light.text-decoration-none(href="/about") Về chúng tôi
+                    li.mb-2
+                        a.text-light.text-decoration-none(href="/contact") Liên hệ
+
+            .col-md-4
+                h6.text-uppercase.mb-3 Liên hệ
+                ul.list-unstyled.small.mb-0
+                    if typeof settingGeneral !== 'undefined' && settingGeneral.address
+                        li.mb-2
+                            i.bi.bi-geo-alt.me-2
+                            | #{settingGeneral.address}
+                    if typeof settingGeneral !== 'undefined' && settingGeneral.phone
+                        li.mb-2
+                            i.bi.bi-telephone.me-2
+                            a.text-light.text-decoration-none(href=('tel:' + settingGeneral.phone)) #{settingGeneral.phone}
+                    if typeof settingGeneral !== 'undefined' && settingGeneral.email
+                        li.mb-2
+                            i.bi.bi-envelope.me-2
+                            a.text-light.text-decoration-none(href=('mailto:' + settingGeneral.email)) #{settingGeneral.email}
+
+        hr.border-secondary.opacity-25
+        - var year = new Date().getFullYear()
+        .d-flex.flex-column.flex-md-row.justify-content-between.align-items-center.gap-2
+            .small
+                if typeof settingGeneral !== 'undefined' && settingGeneral.copyright
+                    != settingGeneral.copyright
+                else
+                    | © #{year} Công ty của bạn. All rights reserved.
+            .small
+                a.text-light.text-decoration-none(href="/privacy") Chính sách bảo mật
+                span.mx-2 •
+                a.text-light.text-decoration-none(href="/terms") Điều khoản sử dụng

@@ -1,7 +1,24 @@
-mixin sub-menu(items,path)
-    ul 
-        each item in items
-            li  
-                a(href=`${path}/${item.slug}`) #{item.title}
-                if item.children && item.children.length > 0
-                    +sub-menu(item.children,path)
+mixin sub-menu(list, basePath, level)
+    - const lvl = typeof level === 'number' ? level : 0;
+    if list && list.length
+        each item in list
+            //- // Level 0: nổi bật hơn
+            if lvl === 0
+                a.dropdown-item.d-flex.align-items-center.justify-content-between.fw-semibold(href=`${basePath}/${item.slug}`)
+                    span.d-inline-flex.align-items-center.text-truncate
+                        i.bi.bi-folder2-open.me-2.text-primary
+                        | #{item.title}
+                    if item.children && item.children.length
+                        i.bi.bi-chevron-right.small.text-muted
+                if item.children && item.children.length
+                    //- // Nhánh con
+                    .ms-3.ps-2.border-start.py-1
+                        +sub-menu(item.children, basePath, lvl + 1)
+            //- // Level >= 1: thu gọn + thụt lề
+            else
+                a.dropdown-item.ps-4.small.d-flex.align-items-center(href=`${basePath}/${item.slug}`)
+                    i.bi.bi-dot.me-2
+                    span.text-truncate #{item.title}
+                if item.children && item.children.length
+                    .ms-4.ps-2.border-start.py-1
+                        +sub-menu(item.children, basePath, lvl + 1)
